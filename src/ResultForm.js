@@ -1,86 +1,191 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { CircleLoader } from 'react-spinners';
+import { css } from '@emotion/core';
+import { connect } from 'react-redux';
+import { createResult } from './store/actions/employeeActions';
+
+
+let letters = RegExp(/^[A-Za-z]+$/);
+const formValid =({formErrors, ...rest} ) => {
+    let valid = true;
+    console.log('form error',formErrors);
+    Object.values(formErrors).forEach(val => {
+        val.length > 0 && (valid = false)
+    });
+    Object.values(rest).forEach(val => {
+        val.length === 0 && (valid = false);
+       
+    });
+        return valid;
+ }
+const loaderCss = css`
+margin: 150px auto 10px auto;
+border-color:white;
+`
 
 class ResultForm extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+           university_name:'',
+            course: '',
+            grade: '',
+            year_of_graduation:'',
+            loading: false,
+            formErrors: {
+            university_name:'',
+            course:'',
+            grade:'',
+            year_of_graduation:'',
+            }
+        }
+    }
+    handleSubmit = (event) => {
+        event.preventDefault();
+         console.log('props ', this.props);
+        const id = this.props.id;
+            
+        if (formValid(this.state)) {
+                const data = {
+                employee_id: id,
+                university_name: this.state.university_name,
+                course: this.state.course,
+                grade: this.state.grade,
+                year_of_graduation: this.state.year_of_graduation,        
+            }
+            this.setState({
+                loading: true
+            });
+            
+             this.props.createResult(data).then(datum => {
+                this.setState({
+                    loading: false
+                });
+                 
+                 console.log('Success:', datum);     
+             })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+  
+        }
+        
+        else {
+            console.error('Form inValid');
+            }
+
+    }
+
+    handleChange = (event) => {
+        event.preventDefault();
+        const { name, value } = event.target;
+        let formErrors = this.state.formErrors;
+
+        switch (name) {
+            case 'university_name': formErrors.university_name = letters.test(value) &&  value.length > 2 
+                ? "" : 'minimum of 3 letters required' ;
+                break;
+            
+            case 'course': formErrors.course = letters.test(value) && value.length > 2
+                ? "" : 'minimum of 3 characters required';
+                break;
+            
+                case 'grade': formErrors.grade =  value.length > 2
+                ?  "" : 'invalid email addreess';
+                break;
+                case 'year_of_graduation': formErrors.year_of_graduation = value.length > 2
+                ? "" : 'select'  ;
+                break;
+               
+            default:
+                break;
+        }
+        this.setState({ formErrors, [name]: value }, console.log(this.state));
+        
+    }
     render() {
         return (
-            <div className="home-page">
-                <div className="nav">
-                    <ul>
-                        <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                  
-                        <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                            <div className="sub-region">
-                                <ul >
-                                    <li><button type="button">Edit Region</button></li>
-                                    <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                    </ul>
-                </div>
-                <div className="rest">
-                    <div className="update-form">
-                        <div className="heading">
-                            <ul>
-                            <li><Link> Basic Information</Link></li>
-                               <li><Link to='/guarantorForm'>Guarantor Form</Link></li> 
-                               <li><Link to='/employerForm'>Previous Employer</Link></li>
-                               <li><Link to ='/resultForm'>Result</Link></li> 
-                            </ul>
+            <div>
+                {this.state.loading ?
+                    <div className="sweet-loading">
+                        <CircleLoader css={loaderCss} size={100}
+                            color={"#2b4f81"}
+                            loading={true} />
+                    </div> :
+                    <div className="rest">
+                        <div className="update-form">
+                            <form className="guarantor-form">
+                                <div className="guarantor-name">
+                                    <div>
+                                <label>University Name</label><br />
+                                <input type="text"
+                                    name="university_name"
+                                    onChange={this.handleChange}
+                                    value={this.state.university_name}
+                                    className="addname"
+                                            placeholder="Oluwabukola" />
+                                    </div>
+                                    <div>
+                            
+                                <label>Course</label><br />
+                                <input type="text"
+                                    name="course"
+                                    onChange={this.handleChange}
+                                    value={this.state.course}
+                                    className="addname"
+                                            placeholder="Oluwabukola" />
+                                    </div>
+                                    </div>
+                                
+                                <div className="guarantor-name">
+                                    <div>
+                                <label>Grade</label><br />
+                                <input type="text"
+                                    name="grade"
+                                    onChange={this.handleChange}
+                                    value={this.state.grade}
+                                    className="addname"
+                                            placeholder="Oluwabukola" />
+                                    </div>
+
+                                    <div>
+                                <label>Year of Graduation</label><br />
+                                <input type="text"
+                                    name="year_of_graduation"
+                                    onChange={this.handleChange}
+                                    value={this.state.year_of_graduation}
+                                    className="addname"
+                                            placeholder="Oluwabukola" />
+                                    </div>
+                                    </div>
+                                <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
+                            
+                            </form>
                         </div>
-                        <form className="guarantor-form">
-                            
-                                    <label>Employee Id</label><br />
-                                    <input type="text"
-                                        name="employee_id"
-                                        // onChange={this.handleChange}
-                                        // value={this.state.firstName}
-                                        className="addname"
-                                        placeholder="Oluwabukola" /><br />
-                        
-                                    <label>University Name</label><br />
-                                    <input type="text"
-                                        name="university_name"
-                                        // onChange={this.handleChange}
-                                        // value={this.state.lastName}
-                                        className="addname"
-                                        placeholder="Oluwabukola" />
-                            
-                                    <label>Course</label><br />
-                                    <input type="text"
-                                        name="course"
-                                        // onChange={this.handleChange}
-                                        // value={this.state.lastName}
-                                        className="addname"
-                                        placeholder="Oluwabukola" />
-                                
-                                
-                                    <label>Grade</label><br />
-                                    <input type="text"
-                                        name="grade"
-                                        // onChange={this.handleChange}
-                                        // value={this.state.lastName}
-                                        className="addname"
-                                        placeholder="Oluwabukola" />
-                            
-                                    <label>Year of Graduation</label><br />
-                                    <input type="text"
-                                        name="year_of_graduation"
-                                        // onChange={this.handleChange}
-                                        // value={this.state.lastName}
-                                        className="addname"
-                                        placeholder="Oluwabukola" />
-                                            <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
-                            
-                        </form>
                     </div>
+                }
                 </div>
-            </div>
+            
         );
     }
         
      
 }
- export default ResultForm
+
+const mapStateToProps = (state) => {
+    return {
+        employee: state.employee.employee
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        createResult: (result) => dispatch(createResult(result))
+        
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultForm));
+
+ 

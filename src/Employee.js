@@ -4,7 +4,7 @@ class Employee extends React.Component{
     render() {
         return (
             <div className="home-page">
-                <div className="nav">
+                <div className="navi">
                     <ul>
                         <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
                       

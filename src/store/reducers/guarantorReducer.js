@@ -1,15 +1,4 @@
-const initalState = {
-    first_name: '',
-    last_name: '',
-    other_name: '',
-    email: '',
-    gender: '',
-    address: '',
-    state: '',
-    phone_number: '',
-    date_of_birth: '',
-    loading: false,
-}
+
 
 const initState = {
     loading: false,
@@ -24,11 +13,11 @@ const guarantorReducer = (state = initState, action) => {
      const{type, payload} = action
     switch (type) {
 
-            case 'ADD_GUARANTOR_STARTED':
-              return {
-                ...state,
-                loading: true
-            };
+            // case 'ADD_GUARANTOR_STARTED':
+            //   return {
+            //     ...state,
+            //     loading: true
+            // };
         
         case 'ADD_GUARANTOR':
            
@@ -40,12 +29,12 @@ const guarantorReducer = (state = initState, action) => {
                  error: null,
                 guarantor: payload.data
             };
-            case 'ADD_GUARANTOR_FAILURE':
-                return {
-                  ...state,
-                  loading: false,
-                  error: action.payload.error
-                };
+            // case 'ADD_GUARANTOR_FAILURE':
+            //     return {
+            //       ...state,
+            //       loading: false,
+            //       error: action.payload.error
+            //     };
         
         default:
             return state;

@@ -13,6 +13,14 @@ import Verify from './Verify';
 import GuarantorForm from './GuarantorForm';
 import ResultForm from './ResultForm';
 import EmployerForm from './EmployerForm';
+import Update from './Update';
+import View from './View';
+import EmployeeInfo from './EmployeeInfo';
+import GuarantorInfo from './GuarantorInfo';
+import EmployerInfo from './EmployerInfo';
+import ResultInfo from './ResultInfo';
+import EditEmployee from './EditEmployee';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {
@@ -38,12 +46,28 @@ function App() {
           </Route>
           <Route path='/verify' component={Verify}>
           </Route>
-          <Route path='/guarantorForm/employee_id' component={GuarantorForm}>
+          <Route path='/guarantorForm/:id' component={GuarantorForm}>
           </Route>
-          <Route path='/resultForm' component={ResultForm}>
+          <Route path='/employerForm/:id' component={EmployerForm}>
           </Route>
-          <Route path='/employerForm' component={EmployerForm}>
+          <Route path='/resultForm/:id' component={ResultForm}>
           </Route>
+          <Route path='/update/:id' component={Update}>
+          </Route>
+          <Route path='/view/:id' component={View}>
+          </Route>
+          <Route path='/employeeInfo/:id' component={EmployeeInfo}>
+          </Route>
+          <Route path='/employerInfo/:id' component={EmployerInfo}>
+          </Route>
+          <Route path='/guarantorInfo/:id' component={GuarantorInfo}>
+          </Route>
+          <Route path='/resultInfo/:id' component={ResultInfo}>
+          </Route>
+          <Route path='/editEmployee/:id' component={EditEmployee}>
+          </Route>
+
+         
         </div>
         </Switch>
       </Router>

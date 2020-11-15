@@ -19,7 +19,7 @@ class CreateEmployee extends React.Component{
     
         return (
             <div className="home-page">
-                <div className="nav">
+                <div className="navi">
                     <ul>
                         <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
                       
@@ -57,9 +57,10 @@ class CreateEmployee extends React.Component{
                                         <td>{employ.first_name}</td>
                                         <td>{employ.last_name}</td>
                                         <td>{employ.email}</td>  
-                                        <td><button type="button" className="view-btn">VIEW</button></td>
+                                        <td><Link to={`/view/${employ.id}`}><i class="far fa-eye eye"></i></Link></td>
                                         <td><button type="button" className="view-btn">DELETE</button></td>
-                                        <td><button type="button" className="view-btn"><Link to="/guarantorForm">Update</Link></button></td>
+                                        <td><button type="button" className="view-btn"><Link to={`/update/${employ.id}`}>Update</Link></button></td>
+                                        {/* <td><button type="button" className="view-btn"><Link to={`/guarantorForm/${employ.id}`}>Update</Link></button></td> */}
                                     </tr>
                                 
                                 )

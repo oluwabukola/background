@@ -1,5 +1,6 @@
 const initState = {
     
+    region: [],
     regionName: [],
 }
 
@@ -14,8 +15,18 @@ const regionReducer = (state = initState, action) => {
             console.log(action);
             return {
                 ...state,
-                employee: payload.region.data
-            }
+                region: payload.region.data
+            };
+        
+        case 'DISPLAY_REGION':
+           
+            console.log('region displayed', action.payload);
+            console.log(state);
+            console.log(action);
+            return {
+                ...state,
+                regionName: payload.data
+            };
         
         default:
             return state;

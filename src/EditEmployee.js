@@ -1,16 +1,13 @@
 import React from 'react'; 
 import { Link, withRouter } from 'react-router-dom';
 import { displayRegion } from './store/actions/employeeActions';
-import Home from './home';
-import Regions from './Regions';
-import AddRegion from './AddRegion';
-import Employee from './Employee';
-import CreateEmployee from './CreateEmployee';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
+import EmployeeInfo from './EmployeeInfo';
+import { editEmployee } from './store/actions/displayActions';
+import { displayEmployee } from './store/actions/displayActions';
 
-const token = localStorage.getItem('token');
 let numbers = RegExp(/^[0-9]+$/);
 let letters = RegExp(/^[A-Za-z]+$/);
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
@@ -22,7 +19,6 @@ const formValid =({formErrors, ...rest} ) => {
     });
     Object.values(rest).forEach(val => {
         val.length === 0 && (valid = false);
-        // val === null && (valid = false);
     });
         return valid;
  }
@@ -31,19 +27,11 @@ margin: 150px auto 10px auto;
 border-color:white;
 `
 
-class EmployeeForm extends React.Component{
+class Edit extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            first_name:'',
-            last_name: '',
-            other_name: '',
-            email: '',
-            gender: '',
-            address: '',
-            state: '',
-            phone_number: '',
-            date_of_birth: '',
+            employee: {},
             loading: false,
             formErrors: {
                 first_name:'',
@@ -58,71 +46,75 @@ class EmployeeForm extends React.Component{
             }
         }
     }
+
     componentDidMount() {
-        this.props.displayRegion();
-        //console.log('display', this.props.displayRegion());
+        const params = this.props.match.params;
+
+        console.log(params.id);
+      
+        this.props.getEmployee(params.id);
+        this.setState({
+            employee: this.props.employee
+        })
+        console.log('employee data', this.props.employee);
+        this.props.getRegions();
+        console.log('regions', this.props.regionName)
+  
     }
-    
     handleSubmit = (event) => {
         event.preventDefault();
-            
+        console.log('emplourrr', this.state.formErrors)
+        let errors = this.state.formErrors
+        console.log('errors', errors)
         if (formValid(this.state)) {
+            const params = this.props.match.params;
+            console.log('sending...', params.id);
+               const { employee } = this.state;
             
             const data = {
-            first_name: this.state.first_name,
-            region_name: this.state.region_name,
-            last_name: this.state.last_name,
-            other_name:this.state.other_name,
-            email: this.state.email,
-            gender: this.state.gender,
-            address: this.state.address,
-            phone_number: this.state.phone_number,
-            date_of_birth: this.state.date_of_birth,
-            state: this.state.state
+            employee_id: params.id,
+            first_name: employee.first_name,
+            region_name: employee.region_name,
+            last_name: employee.last_name,
+            other_name:employee.other_name,
+            email: employee.email,
+            gender: employee.gender,
+            address: employee.address,
+            phone_number:employee.phone_number,
+            date_of_birth: employee.date_of_birth,
+            state: employee.state
             
             }
             this.setState({
                 loading: true
             });
-            
-            const response = fetch('http://hotelanywhere.ng/background/api/employee', {
-                method: 'POST',
-                headers: {
-                    'Authorization':`Bearer ${token}`,
-                    'Content-Type': 'application/json',
+
+            this.props.editEmployee(data).then(datum => {
+                this.setState({
+                    loading: false
+               });
+                console.log('Success:', datum)
+               // this.props.history.push('/employeeInfo')
                     
-                },
-                body: JSON.stringify(data),
-                
             })
-                .then(response => {
-                  return  response.json();
-                    
-                })
-                .then(datum => {
-                    this.setState({
-                        loading: false
-                    })
-                    console.log('Success:', datum)
-                    this.props.history.push('/createEmployee')
-                    
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                  });
-                  
-    
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            
+            
          }
         else {
         console.error('Form inValid');
         }
-       this.props.history.push('/CreateEmployee');
+      //this.props.history.push('/CreateEmployee');
     }
+    
 
     handleChange = (event) => {
         event.preventDefault();
         const { name, value } = event.target;
         let formErrors = this.state.formErrors;
+        let employee = this.state.employee
 
         switch (name) {
             case 'first_name': formErrors.first_name = letters.test(value) &&  value.length > 2 
@@ -148,26 +140,31 @@ class EmployeeForm extends React.Component{
                 case 'state': formErrors.state= letters.test(value)  && value.length > 2
                 ? "" : 'invalid state'  ;
                 break;
-                case 'phone_number': formErrors.phone_number = numbers.test(value)  && value.length > 10 
+                case 'phone_number': formErrors.phone_number = numbers.test(value)  && value.length > 5
                 ? "" : 'invalid phone number' ;
                 break;
                 case 'date_of_birth': formErrors.date_of_birth =  value.length > 1
                 ? "" :  'invalid age' ;
                 break;
                 case 'region_name': formErrors.region_name =  value.length > 2
-                ? "" :  'invalid age' ;
+                ? "" :  'invalid region' ;
                 break;
  
                 
             default:
                 break;
         }
-        this.setState({ formErrors, [name]: value }, console.log(this.state));
+        this.setState({ formErrors: formErrors });
+        employee[name] = value
+        this.setState({employee})
+        console.log(this.state)
         
     }
     render() {
         const { formErrors } = this.state;
+        const { employee } = this.state;
         const { regionName } = this.props;
+        console.log('edit', regionName);
         return (
             <div>
                 {this.state.loading ?
@@ -203,7 +200,7 @@ class EmployeeForm extends React.Component{
                                         <input type="text"
                                             name="first_name"
                                             onChange={this.handleChange}
-                                            value={this.state.first_name}
+                                            defaultValue={employee.first_name}
                                             className="addname"
                                             placeholder="Oluwabukola" /><br />
                                         <span className="errorMessage">{formErrors.first_name}</span>
@@ -213,7 +210,7 @@ class EmployeeForm extends React.Component{
                                         <input type="text"
                                             name="last_name"
                                             onChange={this.handleChange}
-                                            value={this.state.last_name}
+                                            defaultValue={employee.last_name}
                                             className="addname"
                                             placeholder="Oluwabukola" />
                                         <span className="errorMessage">{formErrors.last_name}</span>
@@ -224,7 +221,7 @@ class EmployeeForm extends React.Component{
                                             name="other_name"
                                             className="addname"
                                             onChange={this.handleChange}
-                                            value={this.state.other_name}
+                                            defaultValue={employee.other_name}
                                             placeholder="Oluwabukola" />
                                         <span className="errorMessage">{formErrors.other_name}</span>
                                     </div>
@@ -235,7 +232,7 @@ class EmployeeForm extends React.Component{
                                         <input type="email"
                                             name="email"
                                             onChange={this.handleChange}
-                                            value={this.state.email}
+                                            defaultValue={employee.email}
                                             className="mails"
                                             placeholder="bb@gmail.com" />
                                         <span className="errorMessage">{formErrors.email}</span>
@@ -243,16 +240,15 @@ class EmployeeForm extends React.Component{
                                     <div className="radio">
                                         <label >Gender:</label>
                                         <div class="genderOption">
-                                            <input type="radio" id="male" className="male"
+                                            <input type="radio" id="male" className="male" checked={employee.gender === 'male'}
                                                 onChange={this.handleChange}
                                                 name="gender" value="male"
                                         
                                             />
                                             <label for="male">Male</label><br />
-                                            <input type="radio" id="female" name="gender"
+                                            <input type="radio" id="female" name="gender" checked={employee.gender === 'f'}
                                                 onChange={this.handleChange}
                                                 value="female"
-                                       
                                             />
                                             <label for="female">Female</label>
                                         </div>
@@ -264,7 +260,7 @@ class EmployeeForm extends React.Component{
                                 <input type="text"
                                     name="address"
                                     onChange={this.handleChange}
-                                    value={this.state.address}
+                                    defaultValue={employee.address}
                                     className="addname"
                                     placeholder="Enter address" />
                                         <span className="errorMessage">{formErrors.address}</span>
@@ -274,7 +270,7 @@ class EmployeeForm extends React.Component{
                                 <input type="text"
                                     name="state"
                                     onChange={this.handleChange}
-                                    value={this.state.state}
+                                    defaultValue={employee.state}
                                     className="addname"
                                     placeholder="Enter state" />
                                     <span className="errorMessage">{formErrors.state}</span>
@@ -286,7 +282,7 @@ class EmployeeForm extends React.Component{
                                 <input type="text"
                                     name="phone_number"
                                     onChange={this.handleChange}
-                                    value={this.state.phone_number}
+                                    defaultValue={employee.phone_number}
                                     className="addname"
                                     placeholder="Enter phone number" />
                                         <span className="errorMessage">{formErrors.phone_number}</span>
@@ -297,7 +293,7 @@ class EmployeeForm extends React.Component{
                                     name="date_of_birth"
                                     className="addname"
                                     onChange={this.handleChange}
-                                    value={this.state.date_of_birth}
+                                    defaultValue={employee.date_of_birth}
                                     placeholder="Enter age" />
                                         <span className="errorMessage">{formErrors.date_of_birth}</span>
                                     </div>
@@ -307,7 +303,7 @@ class EmployeeForm extends React.Component{
 
                                 <label>Region</label>
                                 <select className="addname">
-                                <option>--select region--</option>
+                                <option >{employee.region_name}</option>
                                 {
                              regionName != null && regionName.map((regionName) =>
                              <option key={regionName.id}>{regionName.name }</option>
@@ -330,17 +326,19 @@ class EmployeeForm extends React.Component{
 }
 
 const mapStateToProps = (state) => {
-    console.log(state.regionName);
+    console.log('prop reqion',state.region.regionName);
     return {
-        regionName: state.region.regionName
+        employee: state.employee.display,
+        regionName: state.region.regionName,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        displayRegion: (regionName) => {
-            dispatch(displayRegion(regionName));
-        }
+        getRegions: (regionName) => dispatch(displayRegion(regionName)),
+        getEmployee: (employee) => dispatch(displayEmployee(employee)),
+        editEmployee: (employee) => dispatch(editEmployee(employee))
+        
     }
     
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EmployeeForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Edit));

@@ -6,7 +6,7 @@ class Home extends React.Component{
        
         return (
             <div className="home-page">
-                <div className="nav">
+                <div className="navi">
                     <ul>
                         <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
                         <li><Link to='/regions'><i className="fas fa-compass"></i>Regions</Link> </li>

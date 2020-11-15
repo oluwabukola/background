@@ -1,10 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { displayRegion } from './store/actions/employeeActions';
+
 class Regions extends React.Component{
+    constructor(props) {
+        super(props);
+       
+    }
+    componentDidMount() {
+      this.props.displayRegion();
+      //console.log('display', this.props.displayRegion());
+    }
     render() {
+        const { regionName } = this.props;
+        console.log('region', regionName);
+        
         return (
             <div className="home-page">
-                <div className="nav">
+                <div className="navi">
                     <ul>
                         <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
                       
@@ -21,10 +35,7 @@ class Regions extends React.Component{
                 </div>
                 <div className="rest">
                     <h1>Regions</h1>
-                    {/* <div className="search-container">
-                            <input type="search" placeholder="search region"></input>
-                            <div className="icon"><i class="fas fa-search"></i></div>
-                        </div> */}
+                
                         <div className="message"></div>
                     
                    <button type="button" className="add"><Link to="/addregion">Add Region</Link> </button>
@@ -33,17 +44,24 @@ class Regions extends React.Component{
                             <tr>
                             <th>S/N</th>
                             <th>Region</th>
+                            <th>Date Created</th>
                             <th>Edit</th>
                             <th>View</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Lagos</td>
-                                <td><button type="button" className="edit-btn">Edit</button></td>
-                                <td><button type="button" className="view-btn"><Link to="/employee">View</Link></button></td>
-                            </tr>
+                            {
+                             regionName != null && regionName.map((regionName) =>
+                                <tr key={regionName.id}>
+                                         <td>{regionName.id}</td>
+                                         <td>{regionName.name}</td>
+                                         <td>{regionName.created_at.split('T')[0]}</td>
+                                         
+                                    <td><button type="button" className="edit-btn">Edit</button></td>
+                                    <td><button type="button" className="view-btn"><Link to="/employee">View</Link></button></td>
+                                     </tr>
+                                 )
+                            }
                             </tbody>
                         </table>
                 </div>
@@ -51,4 +69,19 @@ class Regions extends React.Component{
         )
     }
 }
-export default Regions;
+const mapStateToProps = (state) => {
+    console.log(state.regionName);
+    return {
+        regionName: state.region.regionName
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        displayRegion: (regionName) => {
+            dispatch(displayRegion(regionName));
+        }
+    }
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Regions);

@@ -1,9 +1,9 @@
 
-
 const initState = {
-    loading: false,
+    oneguarantor:[],
     guarantor: [],
-    error: null
+    error: null,
+    
   };
 
 
@@ -13,11 +13,6 @@ const guarantorReducer = (state = initState, action) => {
      const{type, payload} = action
     switch (type) {
 
-            // case 'ADD_GUARANTOR_STARTED':
-            //   return {
-            //     ...state,
-            //     loading: true
-            // };
         
         case 'ADD_GUARANTOR':
            
@@ -29,12 +24,12 @@ const guarantorReducer = (state = initState, action) => {
                  error: null,
                 guarantor: payload.data
             };
-            // case 'ADD_GUARANTOR_FAILURE':
-            //     return {
-            //       ...state,
-            //       loading: false,
-            //       error: action.payload.error
-            //     };
+            case 'DISPLAY_GUARANTOR':
+                console.log('one guarantor', action.payload);
+                return {
+                    ...state,
+                    oneguarantor: payload.data
+                };
         
         default:
             return state;

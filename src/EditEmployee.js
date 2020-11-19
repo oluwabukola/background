@@ -4,7 +4,7 @@ import { displayRegion } from './store/actions/employeeActions';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
-import EmployeeInfo from './EmployeeInfo';
+import EmployerInfo from './EmployerInfo';
 import { editEmployee } from './store/actions/displayActions';
 import { displayEmployee } from './store/actions/displayActions';
 
@@ -94,7 +94,7 @@ class Edit extends React.Component{
                     loading: false
                });
                 console.log('Success:', datum)
-               // this.props.history.push('/employeeInfo')
+                // this.props.history.push('/employerInfo')
                     
             })
             .catch((error) => {

@@ -1,7 +1,9 @@
 
 const initState = {
-    loading: false,
     employer: [],
+    employers: [],
+    oneemployer: [],
+    editemployer: [],
     error: null
   };
 
@@ -17,10 +19,31 @@ const employerReducer = (state = initState, action) => {
            
             return {
                 ...state,
-                loading: false,
                  error: null,
                 employer: payload.data
             };
+            case 'GET_EMPLOYERS':
+           
+            console.log('employer retrieved', action.payload);
+           
+            return {
+                ...state,
+                
+                employers: payload.data
+            };
+             case 'DISPLAY_EMPLOYER':
+            console.log('display employer', action.payload);
+          
+            return {
+                ...state,
+                oneemployer: payload.data
+            };
+            case 'EDIT_EMPLOYER':
+                console.log('edit employer', action.payload);
+                return {
+                    ...state,
+                    editemployer: payload.data
+                };
             
         default:
             return state;

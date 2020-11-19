@@ -123,8 +123,7 @@ class AddRegion extends React.Component{
                                 onChange={this.handleChange}
                                 value={this.state.name}
                                 placeholder="Enter region name" required /><br />
-                   
-                            <button type='button' className="form-submit" onClick={this.handleSubmit}>Submit</button>
+                            <button type='button' className="region-submit" onClick={this.handleSubmit}>Submit</button>
                         
                         </form>
                     </div>

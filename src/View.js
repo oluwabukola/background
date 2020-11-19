@@ -4,9 +4,10 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import EmployeeInfo from './EmployeeInfo';
-import GuarantorInfo from './GuarantorInfo';
-import EmployerInfo from './EmployerInfo';
+//import GuarantorInfo from './GuarantorInfo';
+import Employers from './Employers';
 import ResultInfo from './ResultInfo';
+import Guarantors from './Guarantors';
 
 
 
@@ -39,11 +40,11 @@ class View extends React.Component{
                 <Tab eventKey="Basic Information" title="Employee">
                  <EmployeeInfo id={`${params.id}`} /> 
                         </Tab>
-                 <Tab eventKey="Guarantor" title="Guarantor">
-                  <GuarantorInfo id={`${params.id}`} /> 
+                    <Tab eventKey="Guarantor" title="Guarantor">
+                  <Guarantors id={`${params.id}`} /> 
                  </Tab>
                 <Tab eventKey="Previous Employer" title="Previous Employer">
-                 <EmployerInfo  id={`${params.id}`} /> 
+                 <Employers  id={`${params.id}`} /> 
                     </Tab>
                  <Tab eventKey="Result" title="Result" >
                   <ResultInfo  id={`${params.id}`} /> 

@@ -134,11 +134,14 @@ export const createResult = (result) => {
             },
             body: JSON.stringify(result),
         }).then(response => {
-                console.log('resposne', response)
+            console.log('resposne', response)
+            console.log('result', result)
+
                 return response.json();
 
             }).catch(e => {
                 console.log(e)
+                alert(JSON.stringify(e))
                 return {
                     success: false,
                     data: []
@@ -173,6 +176,36 @@ export const displayRegion = (regionName) => {
               });
         
         
+    }
+}
+
+export const editRegion= (region) => {
+    const token = localStorage.getItem('token');
+    console.log('inside action', region)
+    return (dispatch, getState) => {
+       
+        return fetch(`http://hotelanywhere.ng/background/api/region/${region.id}`, {
+        
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type':  'application/json',
+                    
+            },
+            body: JSON.stringify(region),
+        })
+            .then(response => {
+                console.log('resposne', response)
+                return response.json();
+                    
+            }).catch(e => {
+                console.log(e)
+                return {
+                    success: false,
+                    data: []
+                }
+            })
+               
     }
 }
 

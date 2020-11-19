@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
-import { createResult } from './store/actions/employeeActions';
+import { displayResult, editResult } from './store/actions/displayActions';
 
 
 let letters = RegExp(/^[A-Za-z]+$/);
@@ -24,14 +24,11 @@ margin: 150px auto 10px auto;
 border-color:white;
 `
 
-class ResultForm extends React.Component{
+class EditResult extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-           university_name:'',
-            course: '',
-            grade: '',
-            year_of_graduation:'',
+          result:{},
             loading: false,
             formErrors: {
             university_name:'',
@@ -41,25 +38,42 @@ class ResultForm extends React.Component{
             }
         }
     }
+    componentDidMount() {
+         const params = this.props.match.params;
+        console.log(params.id);
+        // const data = this.props.id
+        // console.log(data);
+        this.props.editResult(params.id);
+        this.setState({
+            result: this.props.result
+        })
+          console.log('employer data', this.props.result);
+    }
+
     handleSubmit = (event) => {
         event.preventDefault();
-         console.log('props ', this.props);
-        const id = this.props.id;
-            
+        console.log('employer error', this.state.formErrors)
+        let errors = this.state.formErrors
+        console.log('errors', errors)
+      
         if (formValid(this.state)) {
+            const params = this.props.match.params;
+            // console.log('sending...', params.id);
+               const { result } = this.state;
+            
             const data = {
                 
-                employee_id: id,
-                university_name: this.state.university_name,
-                course: this.state.course,
-                grade: this.state.grade,
-                year_of_graduation: this.state.year_of_graduation,        
+                id: params.id,
+                university_name: result.university_name,
+                course: result.course,
+                grade: result.grade,
+                year_of_graduation: result.year_of_graduation,        
             }
             this.setState({
                 loading: true
             });
             
-             this.props.createResult(data).then(datum => {
+             this.props.editResult(data).then(datum => {
                 this.setState({
                     loading: false
                 });
@@ -80,8 +94,10 @@ class ResultForm extends React.Component{
 
     handleChange = (event) => {
         event.preventDefault();
+    
         const { name, value } = event.target;
         let formErrors = this.state.formErrors;
+        let result = this.state.result
 
         switch (name) {
             case 'university_name': formErrors.university_name = letters.test(value) &&  value.length > 2 
@@ -102,10 +118,15 @@ class ResultForm extends React.Component{
             default:
                 break;
         }
-        this.setState({ formErrors, [name]: value }, console.log(this.state));
+        this.setState({ formErrors: formErrors });
+        result[name] = value
+        this.setState({result})
+        console.log(this.state)
         
     }
     render() {
+        const { formErrors } = this.state;
+        const { result } = this.state;
         return (
             <div>
                 {this.state.loading ?
@@ -123,7 +144,7 @@ class ResultForm extends React.Component{
                                 <input type="text"
                                     name="university_name"
                                     onChange={this.handleChange}
-                                    value={this.state.university_name}
+                                    value={result.university_name}
                                     className="addname"
                                             placeholder="Oluwabukola" />
                                     </div>
@@ -133,7 +154,7 @@ class ResultForm extends React.Component{
                                 <input type="text"
                                     name="course"
                                     onChange={this.handleChange}
-                                    value={this.state.course}
+                                    value={result.course}
                                     className="addname"
                                             placeholder="Oluwabukola" />
                                     </div>
@@ -145,19 +166,18 @@ class ResultForm extends React.Component{
                                 <input type="text"
                                     name="grade"
                                     onChange={this.handleChange}
-                                    value={this.state.grade}
+                                    value={result.grade}
                                     className="addname"
-                                            placeholder="Oluwabukola" />
+                                    placeholder="Oluwabukola" />
                                     </div>
-
                                     <div>
                                 <label>Year of Graduation</label><br />
                                 <input type="text"
                                     name="year_of_graduation"
                                     onChange={this.handleChange}
-                                    value={this.state.year_of_graduation}
+                                    value={result.year_of_graduation}
                                     className="addname"
-                                            placeholder="Oluwabukola" />
+                                 placeholder="Oluwabukola" />
                                     </div>
                                     </div>
                                 <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
@@ -173,17 +193,18 @@ class ResultForm extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        employee: state.employee.employee
+        result: state.result.oneresult
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        createResult: (result) => dispatch(createResult(result))
+        displayResult:(result) => dispatch(displayResult(result)),
+        editResult: (result) => dispatch(editResult(result))
         
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditResult));
 
  

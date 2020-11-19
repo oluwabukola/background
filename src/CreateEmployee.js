@@ -31,7 +31,7 @@ class CreateEmployee extends React.Component{
                                 </ul>
                                 </div>
                         </li>
-                        <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
+                        <li ><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
                     </ul>
                 </div>
                 <div className="rest">
@@ -57,9 +57,9 @@ class CreateEmployee extends React.Component{
                                         <td>{employ.first_name}</td>
                                         <td>{employ.last_name}</td>
                                         <td>{employ.email}</td>  
-                                        <td><Link to={`/view/${employ.id}`}><i class="far fa-eye eye"></i></Link></td>
-                                        <td><button type="button" className="view-btn">DELETE</button></td>
-                                        <td><button type="button" className="view-btn"><Link to={`/update/${employ.id}`}>Update</Link></button></td>
+                                        <td className="eyes"><Link to={`/view/${employ.id}`}><i class="far fa-eye eye"></i></Link></td>
+                                        <td className="eyes"><i class="fas fa-trash-alt"></i></td>
+                                        <td className="eyes"><Link to={`/update/${employ.id}`}><i class="fas fa-pen-square"></i></Link></td>
                                         {/* <td><button type="button" className="view-btn"><Link to={`/guarantorForm/${employ.id}`}>Update</Link></button></td> */}
                                     </tr>
                                 

@@ -3,12 +3,11 @@ import { Link, withRouter } from 'react-router-dom';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
-import { createEmployee } from './store/actions/employeeActions';
-import {createEmployer} from './store/actions/employeeActions'
+import { editEmployer } from './store/actions/displayActions';
+import { displayEmployer } from './store/actions/displayActions';
 
 
 let numbers = RegExp(/^[0-9]+$/);
-let letters = RegExp(/^[A-Za-z]+$/);
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const formValid =({formErrors, ...rest} ) => {
     let valid = true;
@@ -28,17 +27,11 @@ margin: 150px auto 10px auto;
 border-color:white;
 `
 
-class EmployerForm extends React.Component{
+class EditEmployer extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            company_name: '',
-            email: '',
-            phone_number: '',
-            address: '',
-            position:'',
-            issue: '',
-            reason_leaving:'',
+            employer:{},
             loading: false,
             formErrors: {
             company_name: '',
@@ -51,43 +44,58 @@ class EmployerForm extends React.Component{
             }
         }
     }
+    componentDidMount() {
+        const params = this.props.match.params;
+
+        console.log(params.id);
+      
+        this.props.getEmployer(params.id);
+        this.setState({
+            employer: this.props.employer
+        })
+        console.log('employer data', this.props.employer);
+        
+  
+    }
    
     handleSubmit = (event) => {
         event.preventDefault();
-         console.log('props ', this.props);
+        console.log('employer error', this.state.formErrors)
+        let errors = this.state.formErrors
+        console.log('errors', errors)
        
         if (formValid(this.state)) {
 
-             const id= this.props.id;
+            const params = this.props.match.params;
+            console.log('sending...', params.id);
+               const { employer } = this.state;
             
             const data = {
-                employee_id: id,
-                company_name: this.state.company_name,
-                email: this.state.email,
-                address: this.state.address,
-                phone_number: this.state.phone_number,
-                position: this.state.position,
-                issue: this.state.issue,
-                reason_leaving: this.state.reason_leaving,
+                id:params.id,
+                company_name: employer.company_name,
+                email: employer.email,
+                address: employer.address,
+                phone_number: employer.phone_number,
+                position: employer.position,
+                issue: employer.issue,
+                reason_leaving: employer.reason_leaving,
             
             }
             this.setState({
                 loading: true
             });
             
-             this.props.createEmployer(data).then(datum => {
+             this.props.editEmployer(data).then(datum => {
                 this.setState({
                     loading: false
                });
-                console.log('Success:', datum)
-                this.props.history.push('/createEmployee')
+                 console.log('Success:', datum)
+                //  this.props.history.push(`/employers/${params.id}`)
                     
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
- 
-            
         }
         else {
             console.error('Form inValid');
@@ -99,6 +107,7 @@ class EmployerForm extends React.Component{
         event.preventDefault();
         const { name, value } = event.target;
         let formErrors = this.state.formErrors;
+        let employer = this.state.employer
 
         switch (name) {
             case 'company_name': formErrors.company_name = value.length > 2 
@@ -120,12 +129,17 @@ class EmployerForm extends React.Component{
             default:
                 break;
         }
-        this.setState({ formErrors, [name]: value }, console.log(this.state));
+        this.setState({ formErrors: formErrors });
+        employer[name] = value
+        this.setState({employer})
+        console.log(this.state)
         
     }
     render() {
-         const { employer } = this.props;
-        console.log(employer);
+
+        const { formErrors } = this.state;
+        const { employer } = this.state;
+        console.log('edit', employer);
         return (
             <div>
                 {this.state.loading ?
@@ -152,7 +166,7 @@ class EmployerForm extends React.Component{
                                             <input type="text"
                                                 name="company_name"
                                                  onChange={this.handleChange}
-                                                value={this.state.company_name}
+                                                value={employer.company_name}
                                                 className="addname"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -164,7 +178,7 @@ class EmployerForm extends React.Component{
                                             <input type="email"
                                                 name="email"
                                                  onChange={this.handleChange}
-                                                 value={this.state.email}
+                                                 value={employer.email}
                                                 className="mails"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -174,7 +188,7 @@ class EmployerForm extends React.Component{
                                             <input type="text"
                                                 name="phone_number"
                                                  onChange={this.handleChange}
-                                                value={this.state.phone_number}
+                                                value={employer.phone_number}
                                                 className="addname"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -185,7 +199,7 @@ class EmployerForm extends React.Component{
                                             <input type="text"
                                                 name="address"
                                                 onChange={this.handleChange}
-                                             value={this.state.address}
+                                             value={employer.address}
                                                 className="addname"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -194,7 +208,7 @@ class EmployerForm extends React.Component{
                                             <input type="text"
                                                 name="position"
                                                 onChange={this.handleChange}
-                                                 value={this.state.position}
+                                                 value={employer.position}
                                                 className="addname"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -205,7 +219,7 @@ class EmployerForm extends React.Component{
                                             <input type="text"
                                                 name="issue"
                                                  onChange={this.handleChange}
-                                                 value={this.state.issue}
+                                                 value={employer.issue}
                                                 className="addname"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -215,7 +229,7 @@ class EmployerForm extends React.Component{
                                             <input type="text"
                                                 name="reason_leaving"
                                                  onChange={this.handleChange}
-                                                 value={this.state.reason_leaving}
+                                                 value={employer.reason_leaving}
                                                 className="addname"
                                                 placeholder="Oluwabukola" />
                                         </div>
@@ -232,17 +246,18 @@ class EmployerForm extends React.Component{
          
 }
 const mapStateToProps = (state) => {
-    console.log('employer form', state.employer.employer);
+    console.log('employer form', state.employer.oneemployer);
     return {
-        employer: state.employer.employer
+        employer: state.employer.oneemployer
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        createEmployer: (employer) => dispatch(createEmployer(employer))
+        getEmployer: (employer) => dispatch(displayEmployer(employer)),
+        editEmployer: (employer) => dispatch(editEmployer(employer))
         
     }
 }
 
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EmployerForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditEmployer));

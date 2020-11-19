@@ -16,9 +16,9 @@ class EmployeeInfo extends React.Component{
     
     render() {
         const { employee } = this.props;
-        console.log(employee);
+        //console.log(employee);
         const data = this.props.id;
-        console.log('idnnnxx',data);
+
     
         return (
                 <div className="rest">

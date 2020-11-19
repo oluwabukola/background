@@ -20,7 +20,12 @@ import GuarantorInfo from './GuarantorInfo';
 import EmployerInfo from './EmployerInfo';
 import ResultInfo from './ResultInfo';
 import EditEmployee from './EditEmployee';
+import Guarantors from './Guarantors';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import EditRegion from './EditRegion';
+import EditEmployer from './EditEmployer';
+import EditResult from './EditResult';
+import Employers from './Employers';
 
 
 function App() {
@@ -66,8 +71,16 @@ function App() {
           </Route>
           <Route path='/editEmployee/:id' component={EditEmployee}>
           </Route>
-
-         
+          <Route path='/editEmployer/:id' component={EditEmployer}>
+          </Route>
+          <Route path='/guarantors/:id' component={Guarantors}>
+          </Route>
+          <Route path='/editRegion/:id' component={EditRegion}>
+          </Route>
+          <Route path='/editResult/:id' component={EditResult}>
+          </Route>
+          <Route path='/employers/:id' component={Employers}>
+          </Route>
         </div>
         </Switch>
       </Router>

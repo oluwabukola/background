@@ -26,27 +26,27 @@ class Regions extends React.Component{
                             <div className="sub-region">
                             <ul >
                                 <li><button type="button">Edit Region</button></li>
-                                <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
+                                <li> <Link to='/addregion'><button type="button">Add Region</button></Link></li>
                                 </ul>
                                 </div>
                         </li>
                         <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
+                        <li><i className="fas fa-sign-out-alt"></i>Signout</li>
                     </ul>
                 </div>
                 <div className="rest">
                     <h1>Regions</h1>
-                
-                        <div className="message"></div>
                     
-                   <button type="button" className="add"><Link to="/addregion">Add Region</Link> </button>
+                   <button type="button" className="add"><Link to="/addregion">Add Region<i class="fas fa-plus"></i></Link> </button>
                     <table>
                         <thead>
                             <tr>
-                            <th>S/N</th>
+                            <th>Region</th>
                             <th>Region</th>
                             <th>Date Created</th>
                             <th>Edit</th>
                             <th>View</th>
+                            <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,8 +57,8 @@ class Regions extends React.Component{
                                          <td>{regionName.name}</td>
                                          <td>{regionName.created_at.split('T')[0]}</td>
                                          
-                                    <td><button type="button" className="edit-btn">Edit</button></td>
-                                    <td><button type="button" className="view-btn"><Link to="/employee">View</Link></button></td>
+                                    <td className="eyes"><Link to={`/editRegion/${regionName.id}`}><i class="fas fa-trash-alt"></i></Link></td>
+                                    <td className="eyes"><Link to="/employee"><i class="far fa-eye eye"></i></Link></td>
                                      </tr>
                                  )
                             }
@@ -70,7 +70,7 @@ class Regions extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
-    console.log(state.regionName);
+    console.log(state.region.regionName);
     return {
         regionName: state.region.regionName
     }

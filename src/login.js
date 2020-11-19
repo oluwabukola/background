@@ -1,4 +1,8 @@
 import React from 'react';
+import { CircleLoader } from 'react-spinners';
+import { css } from '@emotion/core';
+import { Link } from 'react-router-dom';
+
 
 const emailRegex = RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const formValid =({formErrors, ...rest} ) => {
@@ -12,10 +16,16 @@ const formValid =({formErrors, ...rest} ) => {
     });
         return valid;
 }
+const loaderCss = css`
+margin: 150px auto 10px auto;
+border-color:white;
+`
+
 class Login extends React.Component{
         state = {
             email:'',
             password: '',
+            loading: false,
             formErrors: {
                 email:'',
                 password: '',
@@ -28,6 +38,9 @@ class Login extends React.Component{
             email: this.state.email,
             password:this.state.password,
         }
+        this.setState({
+            loading: true
+        });
         if (formValid(this.state)) {
             const response = fetch('http://hotelanywhere.ng/background/api/auth/login', {
                 method: 'POST',
@@ -42,6 +55,9 @@ class Login extends React.Component{
                     
                 })
                 .then(datum => {
+                    this.setState({
+                        loading: false
+                    })
                     console.log('Success:', datum)
                     const { access_token } = datum;
                     localStorage.setItem('token', access_token);
@@ -87,28 +103,38 @@ class Login extends React.Component{
     render() {
         const { formErrors } = this.state;
         return (
+            <div>
+                {this.state.loading ?
+                    <div className="sweet-loading">
+                        <CircleLoader css={loaderCss} size={100}
+                            color={"#2b4f81"}
+                            loading={true} />
+                    </div> :
             
-            <div className="login-container">
+                    <div className="login-container">
+                        <h3>LOGIN</h3>
                
-                <form className="login" noValidate>
-                <div className="unauthorized">
-                    <h3>email or password not found!</h3>
-                </div>
-                    <input type="email" name="email"
-                        onChange={this.handleChange}
-                        placeholder="Email"
-                        />
-                    <span className="errorMessage">{formErrors.email}</span>
-                    <input type="password"
-                        name="password"
-                        onChange={this.handleChange}
-                        placeholder="Password"
-                        />
-                    <span className="errorMessage">{formErrors.password}</span>
+                        <form className="login" noValidate>
+                            <div className="unauthorized">
+                                <h3>email or password not found!</h3>
+                            </div>
+                            <input type="email" name="email"
+                                onChange={this.handleChange}
+                                placeholder="Email"
+                            />
+                            <span className="errorMessage">{formErrors.email}</span>
+                            <input type="password"
+                                name="password"
+                                onChange={this.handleChange}
+                                placeholder="Password"
+                            />
+                            <span className="errorMessage">{formErrors.password}</span>
                    
-                    <button type="button" className="login-button" onClick={this.handleSubmit}>Login</button>
-                </form>
-            </div>
+                            <button type="button" className="login-button" onClick={this.handleSubmit}>Login</button>
+                        </form>
+                    </div>
+                }
+                </div>
         )
     }
 }

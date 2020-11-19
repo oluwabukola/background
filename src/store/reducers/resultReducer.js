@@ -2,6 +2,8 @@
 const initState = {
     loading: false,
     result: [],
+    oneresult: [],
+    editemployer:[],
     error: null
   };
 
@@ -22,6 +24,18 @@ const resultReducer = (state = initState, action) => {
                  error: null,
                 result: payload.data
             };
+              case 'DISPLAY_RESULT':
+            console.log('display eresult', action.payload);
+            return {
+                ...state,
+                oneresult: payload.data
+            };
+            case 'EDIT_RESULT':
+                console.log('edit employer', action.payload);
+                return {
+                    ...state,
+                    editemployer: payload.data
+                };
             
         default:
             return state;

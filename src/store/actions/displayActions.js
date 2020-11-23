@@ -250,5 +250,34 @@ export const editResult = (result) => {
                
     }
 }
+export const editGuarantor= (guarantor) => {
+    const token = localStorage.getItem('token');
+    console.log('inside action', guarantor)
+    return (dispatch, getState) => {
+       
+        return fetch(`http://hotelanywhere.ng/background/api/guarantor/${guarantor.id}`, {
+        
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                    
+            },
+            body: JSON.stringify(guarantor),
+        })
+            .then(response => {
+                console.log('resposne', response)
+                return response.json();
+                    
+            }).catch(e => {
+                console.log(e)
+                return {
+                    success: false,
+                    data: []
+                }
+            })  
+    }
+}
+
 
 

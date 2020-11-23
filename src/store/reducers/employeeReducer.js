@@ -24,9 +24,7 @@ const employeeReducer = (state = initState, action) => {
                     ...state,
                     display: payload.data
             };
-        
-       
-      
+    
         
         case 'EDIT_EMPLOYEE':
             console.log('edit employee', action.payload);
@@ -34,12 +32,6 @@ const employeeReducer = (state = initState, action) => {
                 ...state,
                 editemployee: payload.data
             };
-            case 'GET_GUARANTORS':
-                console.log('get guarantors', action.payload);
-                return {
-                    ...state,
-                    guarantors: payload.data
-                };
             
         
         default:

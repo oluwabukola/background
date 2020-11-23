@@ -21,8 +21,8 @@ class Guarantors extends React.Component{
     }
     
     render() {
-        const { employee } = this.props;
-        console.log(employee);
+        const {guarantors } = this.props;
+        console.log(guarantors);
     
         return (
                             <div className="rest">
@@ -39,7 +39,7 @@ class Guarantors extends React.Component{
                                     </thead>
                                     <tbody>
                             {
-                            employee != null && employee.map((employ) => 
+                            guarantors != null && guarantors.map((employ) => 
                                     
                                     <tr key={employ.id}>
                                         <td>{employ.id}</td>
@@ -62,9 +62,9 @@ class Guarantors extends React.Component{
             }
            
     const mapStateToProps = (state) => {
-    console.log('prop reqion', state.employee.guarantors);
+    console.log('prop reqion', state.guarantor.guarantors);
     return {
-        employee: state.employee.guarantors,
+        guarantors: state.guarantor.guarantors,
     }
 }
 const mapDispatchToProps = (dispatch) => {

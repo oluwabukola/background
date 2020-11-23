@@ -26,6 +26,7 @@ import EditRegion from './EditRegion';
 import EditEmployer from './EditEmployer';
 import EditResult from './EditResult';
 import Employers from './Employers';
+import EditGuarantor from './EditGuarantor';
 
 
 function App() {
@@ -80,6 +81,8 @@ function App() {
           <Route path='/editResult/:id' component={EditResult}>
           </Route>
           <Route path='/employers/:id' component={Employers}>
+          </Route>
+          <Route path='/editGuarantor/:id' component={EditGuarantor}>
           </Route>
         </div>
         </Switch>

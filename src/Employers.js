@@ -22,6 +22,7 @@ class Employers extends React.Component{
     render() {
         const { employer } = this.props;
         console.log(employer);
+        const data = this.props.id;
     
         return (
                             <div className="rest">

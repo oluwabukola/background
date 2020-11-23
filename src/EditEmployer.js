@@ -90,7 +90,7 @@ class EditEmployer extends React.Component{
                     loading: false
                });
                  console.log('Success:', datum)
-                //  this.props.history.push(`/employers/${params.id}`)
+                  this.props.history.push(`/employers/${params.id}`)
                     
             })
             .catch((error) => {

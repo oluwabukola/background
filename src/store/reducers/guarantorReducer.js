@@ -2,7 +2,9 @@
 const initState = {
     oneguarantor:[],
     guarantor: [],
+    guarantors: [],
     error: null,
+    editguarator:[]
     
   };
 
@@ -29,7 +31,22 @@ const guarantorReducer = (state = initState, action) => {
                 return {
                     ...state,
                     oneguarantor: payload.data
+            };
+            case 'GET_GUARANTORS':
+                console.log('get guarantors', action.payload);
+                return {
+                    ...state,
+                    guarantors: payload.data
                 };
+            
+            case 'EDIT_GUARANTOR':
+                console.log('edit guarantor', action.payload);
+                return {
+                    ...state,
+                    editguarantor: payload.data
+            };
+        
+ 
         
         default:
             return state;

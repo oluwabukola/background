@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { displayGuarantor } from './store/actions/displayActions';
 import { getGuarantors } from './store/actions/displayActions';
 
-
-
 class GuarantorInfo extends React.Component{
     constructor(props) {
         super(props);
@@ -13,7 +11,7 @@ class GuarantorInfo extends React.Component{
     componentDidMount() {
         const data = this.props.match.params.id;
         console.log( 'info state', data);
-      this.props.displayGuarantor(data)
+        this.props.displayGuarantor(data)
        
     }
     
@@ -21,6 +19,8 @@ class GuarantorInfo extends React.Component{
         
         const { guarantor} = this.props;
         console.log(guarantor);
+        const data = this.props.match.params.id;
+
         return (
             <div className="home-page">
                 <div className="navi">
@@ -100,15 +100,13 @@ class GuarantorInfo extends React.Component{
                             <div>Date Updated:</div>
                       </div>
                         <div className="button-update">
-                            <button type="button"> Edit</button>
+                            <button type="button"> <Link to={`/editGuarantor/${data}`}>Edit</Link></button>
                             <button type="button"> Verified</button>
                       </div>
                     </div>
                     </div>
-                    </div>
-                     
+                    </div>  
                 </div>
-                
         );
     }
 }

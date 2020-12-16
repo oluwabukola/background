@@ -1,10 +1,14 @@
 import React from 'react'; 
 import { Link, withRouter } from 'react-router-dom';
 import { editRegion } from './store/actions/employeeActions';
-import { displayRegion } from './store/actions/employeeActions';
+import { getRegion } from './store/actions/displayActions';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
+import Nav from './Nav';
+import toast from 'toasted-notes' 
+import 'toasted-notes/src/styles.css';
+
 
 
 let letters = RegExp(/^[A-Za-z]+$/);
@@ -28,7 +32,7 @@ class EditRegion extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            region: {},
             loading: false,
             formErrors: {
             name: '',  
@@ -39,12 +43,11 @@ class EditRegion extends React.Component{
     componentDidMount() {
         const params = this.props.match.params;
         console.log(this.props);
-      
-        this.props.getRegions(params.id);
+        this.props.getRegion(params.id);
         this.setState({
-        name: this.props.name
+        region: this.props.region
         })
-        console.log(this.props.getRegions(params.id));
+        console.log('region data', this.props.region);
     }
     handleSubmit = (event) => {
         event.preventDefault();
@@ -52,11 +55,12 @@ class EditRegion extends React.Component{
         console.log('errors', errors)
         if (formValid(this.state)) {
             const params = this.props.match.params;
+            const { region } = this.state;
             console.log('sending...', params.id);
             
             const data = {
             id: params.id,
-            name: this.state.name,
+            name: region.name,
             }
             this.setState({
                 loading: true
@@ -65,7 +69,8 @@ class EditRegion extends React.Component{
             this.props.editRegion(data).then(datum => {
                 this.setState({
                     loading: false
-               });
+                });
+                toast.notify('Region successfully edited!');
                 console.log('Success:', datum)
                // this.props.history.push('/employeeInfo')
                     
@@ -87,8 +92,7 @@ class EditRegion extends React.Component{
         event.preventDefault();
         const { name, value } = event.target;
         let formErrors = this.state.formErrors;
-    
-
+        let region = this.state.region
         switch (name) {
             
             case 'name': formErrors.name = letters.test(value) &&  value.length > 2 
@@ -99,13 +103,15 @@ class EditRegion extends React.Component{
             break;
         }  
  
-        this.setState({ formErrors, [name]: value }, console.log(this.state));
-        
+        this.setState({ formErrors: formErrors });
+        region[name] = value
+        this.setState({region})
+        console.log(this.state)
     }
     render() {
         
-        const { regionName } = this.props;
-        console.log('edit', regionName);
+        const { region} = this.props;
+        console.log('edit', region);
         return (
             <div>
                 {this.state.loading ?
@@ -115,21 +121,8 @@ class EditRegion extends React.Component{
                             loading={true} />
                     </div> :
                     <div className="home-page">
-                        <div className="navi">
-                            <ul>
-                                <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                  
-                                <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                                    <div className="sub-region">
-                                        <ul >
-                                            <li><button type="button">Edit Region</button></li>
-                                            <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                            </ul>
-                        </div>
+                        <Nav />
+                    
                         <div className="rest">
                         <button type="button" className="back-btn" onClick={this.handleBack}><i class="fas fa-arrow-left"></i>Back</button>
                         <hr />
@@ -138,13 +131,14 @@ class EditRegion extends React.Component{
                             <input type="text" className="addname"
                                 name="name"
                                 onChange={this.handleChange}
-                                defaultValue={regionName.name}
+                                defaultValue={region.name}
                                 placeholder="Enter region name" required /><br />
                             <button type='button' className="region-submit" onClick={this.handleSubmit}>Submit</button>
     
                         </form>
                         </div>
-                    </div>
+                        </div>
+                
                 }
                 </div>
         )
@@ -154,12 +148,12 @@ class EditRegion extends React.Component{
 const mapStateToProps = (state) => {
     console.log('prop reqion', state.region.regionName);
     return {
-        regionName: state.region.regionName,
+        region: state.region.oneregion,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-         getRegions: (regionName) => dispatch(displayRegion(regionName)),
+         getRegion: (region) => dispatch(getRegion(region)),
         // getEmployee: (employee) => dispatch(displayEmployee(employee)),
         editRegion: (region) => dispatch(editRegion(region))
         

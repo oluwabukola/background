@@ -33,7 +33,7 @@ class Update extends React.Component{
                 </div>
                 <div className="rest">
                     
-                <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example">
+                <Tabs defaultActiveKey="Guarantor Form" id="uncontrolled-tab-example">
                 <Tab eventKey="Guarantor Form" title="Guarantor Form">
                  <GuarantorForm id={`${params.id}`} />
                  </Tab>

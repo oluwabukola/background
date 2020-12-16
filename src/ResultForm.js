@@ -4,7 +4,8 @@ import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { createResult } from './store/actions/employeeActions';
-
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
 
 let letters = RegExp(/^[A-Za-z]+$/);
 const formValid =({formErrors, ...rest} ) => {
@@ -48,7 +49,6 @@ class ResultForm extends React.Component{
             
         if (formValid(this.state)) {
             const data = {
-                
                 employee_id: id,
                 university_name: this.state.university_name,
                 course: this.state.course,
@@ -61,10 +61,22 @@ class ResultForm extends React.Component{
             
              this.props.createResult(data).then(datum => {
                 this.setState({
-                    loading: false
+                    loading: false,
+                    university_name:'',
+                    course: '',
+                    grade: '',
+                  year_of_graduation:'',
+
                 });
-                 
-                 console.log('Success:', datum);     
+                 if (datum.success === false) {
+                    toast.notify('Result not captured!');
+                 }
+                 else {
+                    toast.notify('Result successfully captured!');
+                 }
+              
+                 console.log('Success:', datum);    
+                 {/* console.log(datum.data);*/ }
              })
             .catch((error) => {
                 console.error('Error:', error);
@@ -173,7 +185,7 @@ class ResultForm extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        employee: state.employee.employee
+        result: state.result.result
     }
 }
 

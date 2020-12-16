@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {displayEmployee} from './store/actions/displayActions'
+import { displayEmployee } from './store/actions/displayActions';
+import Nav from './Nav';
 
 class EmployeeInfo extends React.Component{
     constructor(props) {
@@ -21,6 +22,7 @@ class EmployeeInfo extends React.Component{
 
     
         return (
+          
                 <div className="rest">
                 <div className="card">
                     <div className="content">
@@ -76,7 +78,7 @@ class EmployeeInfo extends React.Component{
                     <hr />
                     <div className="content">
                     <div className="button-update">
-                            <div>Date Updated:</div>
+                            <div>Date Updated: { employee != null && employee.updated_at != null && employee.updated_at.split('T')[0] }</div>
                       </div>
                         <div className="button-update">
                             <button type="button"> <Link to={`/editEmployee/${data}`}>Edit</Link></button>
@@ -86,10 +88,8 @@ class EmployeeInfo extends React.Component{
 
                 </div>
                 
-                       
-                          
                 </div>
-                
+                        
         );
     }
 }

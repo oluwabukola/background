@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { displayGuarantor } from './store/actions/displayActions';
 import { getGuarantors } from './store/actions/displayActions';
+import Nav from './Nav';
 
 class GuarantorInfo extends React.Component{
     constructor(props) {
@@ -16,22 +17,13 @@ class GuarantorInfo extends React.Component{
     }
     
     render() {
-        
         const { guarantor} = this.props;
         console.log(guarantor);
         const data = this.props.match.params.id;
 
         return (
             <div className="home-page">
-                <div className="navi">
-                    <ul>
-                        <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                        <li><Link to='/regions'><i className="fas fa-compass"></i>Regions</Link> </li>
-                        <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                        <li><i class="fas fa-sign-out-alt">Signout</i></li>
-                    </ul>
-                </div>
-  
+               <Nav />
                 <div className="rest">
                 <div className="card">
                     <div className="content">

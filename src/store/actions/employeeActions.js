@@ -1,5 +1,5 @@
 
-export const createEmployee = (employee) => {
+export const createdEmployee = (employee) => {
     const token = localStorage.getItem('token');
     return (dispatch, getState) => {
         const response = fetch('http://hotelanywhere.ng/background/api/employee', {
@@ -16,7 +16,7 @@ export const createEmployee = (employee) => {
             })
             .then(data => {
                 console.log(data);
-                dispatch({type: 'ADD_EMPLOYEE', payload:data})
+                dispatch({type: 'ADDED_EMPLOYEE', payload:data})
                
             })
             .catch((error) => {
@@ -24,6 +24,39 @@ export const createEmployee = (employee) => {
               });
         
         
+    }
+}
+
+export const updatedEmployee = (data) => {
+    return {type: 'ADDED_EMPLOYEE', payload:data}
+}
+
+export const creatingEmployee = (employee) => {
+    const token = localStorage.getItem('token');
+    console.log('inside action', employee)
+    return (dispatch, getState) => {
+       
+        return  fetch('http://hotelanywhere.ng/background/api/employee', {
+        
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type':  'application/json',
+                    
+            },
+            body: JSON.stringify(employee),
+        })
+            .then(response => {
+                console.log('resposne', response)
+                return response.json(); 
+            }).catch(e => {
+                console.log(e)
+                return {
+                    success: false,
+                    data: []
+                }
+            })
+               
     }
 }
 

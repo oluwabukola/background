@@ -3,15 +3,9 @@ import React from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import EmployeeInfo from './EmployeeInfo';
-//import GuarantorInfo from './GuarantorInfo';
-import Employers from './Employers';
-import Results from './Results';
-import Guarantors from './Guarantors';
+import RegionInfo from './RegionInfo';
 
-
-
-class View extends React.Component{
+class RegionView extends React.Component{
     render() {
         const params = this.props.match.params;
         console.log(params.id);
@@ -36,22 +30,12 @@ class View extends React.Component{
                 </div>
                 <div className="rest">
                     
-                <Tabs defaultActiveKey="Employee Information" id={`${params.id}`}>
-                <Tab eventKey="Employee Information" title="Employee">
-                 <EmployeeInfo id={`${params.id}`} /> 
+                <Tabs defaultActiveKey="Region" id="uncontrolled-tab-example">
+                <Tab eventKey="Region Information" title="Region">
+                 <RegionInfo id={`${params.id}`} /> 
                         </Tab>
-                    <Tab eventKey="Guarantor" title="Guarantor">
-                  <Guarantors id={`${params.id}`} /> 
-                 </Tab>
-                <Tab eventKey="Previous Employer" title="Previous Employer">
-                 <Employers  id={`${params.id}`} /> 
-                    </Tab>
-                 <Tab eventKey="Result" title="Result" >
-                  <Results  id={`${params.id}`} /> 
-                    </Tab>
                     </Tabs>
                     </div>
-                    
             </div>
         )
     }
@@ -59,8 +43,8 @@ class View extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        employee: state.employee.employee
+        region: state.region.region
     }
 }
 
-export default connect(mapStateToProps)(View);
+export default connect(mapStateToProps)(RegionView);

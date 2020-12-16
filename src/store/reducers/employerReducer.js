@@ -5,9 +5,8 @@ const initState = {
     oneemployer: [],
     editemployer: [],
     error: null
-  };
-
-
+};
+  
 const employerReducer = (state = initState, action) => {
     
      const{type, payload} = action
@@ -43,14 +42,18 @@ const employerReducer = (state = initState, action) => {
                 return {
                     ...state,
                     editemployer: payload.data
+            };
+            case 'DELETE_EMPLOYER':
+                console.log('delete employer', action.payload);
+                return {
+                    ...state,
+                    employers: state.employers.filter(item => item.id !== action.payload)
                 };
             
         default:
             return state;
-        
     }
     
 }
-  
   
 export default employerReducer;

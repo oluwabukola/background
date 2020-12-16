@@ -4,7 +4,8 @@ import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { createGuarantor } from './store/actions/employeeActions';
-
+import toast from 'toasted-notes' 
+import 'toasted-notes/src/styles.css';
 
 
 let numbers = RegExp(/^[0-9]+$/);
@@ -95,8 +96,22 @@ class GuarantorForm extends React.Component{
             
              this.props.createGuarantor(data).then(datum => {
                 this.setState({
-                    loading: false
-               });
+                    loading: false,
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                    gender: '',
+                    address: '',
+                    phone_number: '',
+                    relationship:'',
+                    occupation: '',
+                    business_name:'',
+                    office_address: '',
+                    business_email:'',
+                    phone:'',
+        
+                });
+                 toast.notify('Guarantor successfully captured!');
                  console.log('Success:', datum);
                  
                 //this.props.history.push('/employerForm/:id')
@@ -105,9 +120,8 @@ class GuarantorForm extends React.Component{
             })
             .catch((error) => {
                 console.error('Error:', error);
+
             });
- 
-            
         }
         else {
             console.error('Form inValid');
@@ -309,6 +323,8 @@ class GuarantorForm extends React.Component{
                                     <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
                                 </form>
                             </div>
+                            
+                            
                 }
                 </div>
         )

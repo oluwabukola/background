@@ -1,23 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Nav from './Nav';
 class Employee extends React.Component{
     render() {
         return (
             <div className="home-page">
-                <div className="navi">
-                    <ul>
-                        <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                      
-                        <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                            <div className="sub-region">
-                            <ul >
-                                <li><button type="button">Edit Region</button></li>
-                                <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
-                                </ul>
-                                </div>
-                        </li>
-                    </ul>
-                </div>
+                <Nav />
+                
                 <div className="rest">
                     <div className="region-name">
                     <h2>Osun Region</h2>

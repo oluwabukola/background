@@ -1,14 +1,15 @@
 import React from 'react'; 
 import { Link, withRouter } from 'react-router-dom';
-import { displayRegion } from './store/actions/employeeActions';
+import { displayRegion, creatingEmployee } from './store/actions/employeeActions';
 import Home from './home';
 import Regions from './Regions';
-import AddRegion from './AddRegion';
-import Employee from './Employee';
-import CreateEmployee from './CreateEmployee';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
+import Nav from './Nav';
+import toast from 'toasted-notes' 
+import 'toasted-notes/src/styles.css';
+
 
 const token = localStorage.getItem('token');
 let numbers = RegExp(/^[0-9]+$/);
@@ -31,7 +32,13 @@ margin: 150px auto 10px auto;
 border-color:white;
 `
 
+
 class EmployeeForm extends React.Component{
+    async componentDidMount() {
+        await this.props.displayRegion();
+        const { regionName } = this.props
+        console.log('this state', regionName)
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -42,6 +49,8 @@ class EmployeeForm extends React.Component{
             gender: '',
             address: '',
             state: '',
+            region_name: '',
+            region_id: '',
             phone_number: '',
             date_of_birth: '',
             loading: false,
@@ -54,14 +63,13 @@ class EmployeeForm extends React.Component{
                 address: '',
                 state: '',
                 phone_number: '',
+                region_name: '',
+                region_id: '',
                 date_of_birth: '',
             }
         }
-    }
-    componentDidMount() {
-        this.props.displayRegion();
-        //console.log('display', this.props.displayRegion());
-    }
+            }
+
     
     handleSubmit = (event) => {
         event.preventDefault();
@@ -70,7 +78,8 @@ class EmployeeForm extends React.Component{
             
             const data = {
             first_name: this.state.first_name,
-            region_name: this.state.region_name,
+             region_name: this.state.region_name,
+            region_id: this.state.region_id,
             last_name: this.state.last_name,
             other_name:this.state.other_name,
             email: this.state.email,
@@ -82,87 +91,104 @@ class EmployeeForm extends React.Component{
             
             }
             this.setState({
-                loading: true
+                loading: true,
             });
-            
-            const response = fetch('http://hotelanywhere.ng/background/api/employee', {
-                method: 'POST',
-                headers: {
-                    'Authorization':`Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    
-                },
-                body: JSON.stringify(data),
-                
+            this.props.creatingEmployee(data).then(datum => {
+                this.setState({
+                    loading: false,
+                    first_name:'',
+                     last_name: '',
+                     other_name: '',
+                     email: '',
+                     gender: '',
+                    address: '',
+                    state: '',
+                    phone_number: '',
+                    region_name: '',
+                    date_of_birth: '',
+        
+                });
+                toast.notify('Employee successfully created!');
+                this.props.history.push('/createEmployee');
+                     
             })
-                .then(response => {
-                  return  response.json();
-                    
-                })
-                .then(datum => {
-                    this.setState({
-                        loading: false
-                    })
-                    console.log('Success:', datum)
-                    this.props.history.push('/createEmployee')
-                    
-                })
                 .catch((error) => {
                     console.error('Error:', error);
-                  });
+                });
                   
-    
          }
         else {
         console.error('Form inValid');
+            toast.notify('All fields must be filled!', {
+                color: 'red',
+            });
         }
-       this.props.history.push('/CreateEmployee');
+    }
+    handleRegion = (event) => {
+        const { regionName } = this.props
+       // alert(JSON.stringify(regionName));
+       // event.preventDefault();
+        const { name, value } = event.target;
+        //alert(value);
+        //this.setState({
+         //   region_name:value,
+           // region_id:value,
+        //})
+        //alert(event.target.value);
+        const index = regionName.findIndex(x => x.id == event.target.value);
+        alert(index);
+        this.setState({
+region_name:regionName[index].name,
+            region_id: value,
+        })
+        
     }
 
     handleChange = (event) => {
         event.preventDefault();
-        const { name, value } = event.target;
+       const { name, value } = event.target; 
         let formErrors = this.state.formErrors;
+        
 
         switch (name) {
-            case 'first_name': formErrors.first_name = letters.test(value) &&  value.length > 2 
-                ? "" : 'minimum of 3 letters required' ;
+            case 'first_name': formErrors.first_name = letters.test(value) && value.length > 2
+                ? "" : 'minimum of 3 letters required';
                 break;
             
-                case 'last_name': formErrors.last_ame = letters.test(value)  && value.length > 2
+            case 'last_name': formErrors.last_ame = letters.test(value) && value.length > 2
                 ? "" : 'minimum of 3 characters required';
                 break;
-                case 'other_name': formErrors.other_ame = letters.test(value)  && value.length > 2
-                ? "" :  'minimum of 3 characters required' ;
+            case 'other_name': formErrors.other_ame = letters.test(value) && value.length > 2
+                ? "" : 'minimum of 3 characters required';
                 break;
             
-                case 'email': formErrors.email= emailRegex.test(value)  && value.length > 0
-                ?  "" : 'invalid email addreess';
+            case 'email': formErrors.email = emailRegex.test(value) && value.length > 0
+                ? "" : 'invalid email addreess';
                 break;
-                case 'gender': formErrors.gender = value.length > 2
-                ? "" : 'select'  ;
+            case 'gender': formErrors.gender = value.length > 2
+                ? "" : 'select';
                 break;
-                case 'address': formErrors.address =  value.length > 2
-                ? "" :'minimum of 3 characters required' ;
+            case 'address': formErrors.address = value.length > 2
+                ? "" : 'minimum of 3 characters required';
                 break;
-                case 'state': formErrors.state= letters.test(value)  && value.length > 2
-                ? "" : 'invalid state'  ;
+            case 'state': formErrors.state = letters.test(value) && value.length > 2
+                ? "" : 'invalid state';
                 break;
-                case 'phone_number': formErrors.phone_number = numbers.test(value)  && value.length > 10 
-                ? "" : 'invalid phone number' ;
+            case 'phone_number': formErrors.phone_number = numbers.test(value) && value.length > 10
+                ? "" : 'invalid phone number';
                 break;
-                case 'date_of_birth': formErrors.date_of_birth =  value.length > 1
-                ? "" :  'invalid age' ;
+            case 'date_of_birth': formErrors.date_of_birth = value.length > 1
+                ? "" : 'invalid age';
                 break;
-                case 'region_name': formErrors.region_name =  value.length > 2
-                ? "" :  'invalid age' ;
-                break;
+           // case 'region_name': formErrors.region_name = value.length > 2
+//? "" : 'region not available';
+               // break;
  
                 
             default:
                 break;
         }
-        this.setState({ formErrors, [name]: value }, console.log(this.state));
+        this.setState({ formErrors, [name]: value },console.log(this.state));
         
     }
     render() {
@@ -177,21 +203,7 @@ class EmployeeForm extends React.Component{
                             loading={true} />
                     </div> :
                     <div className="home-page">
-                        <div className="navi">
-                            <ul>
-                                <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                  
-                                <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                                    <div className="sub-region">
-                                        <ul >
-                                            <li><button type="button">Edit Region</button></li>
-                                            <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                            </ul>
-                        </div>
+                        <Nav />
                         <div className="rest">
                             <button type="button" className="back-btn" onClick={this.handleSubmit}><i class="fas fa-arrow-left"></i>Back</button>
                             <hr />
@@ -306,11 +318,11 @@ class EmployeeForm extends React.Component{
                                     <div>
 
                                 <label>Region</label>
-                                <select className="addname">
+                                <select className="addname" onChange={this.handleRegion}>
                                 <option>--select region--</option>
                                 {
                              regionName != null && regionName.map((regionName) =>
-                             <option key={regionName.id}>{regionName.name }</option>
+                             <option  value={regionName.id}>{regionName.name }</option>
         
                                  )
                                     }
@@ -318,11 +330,10 @@ class EmployeeForm extends React.Component{
                                     </div>
                                     
                                     </div>
-                                
-            <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
+                 <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
                             </form>
                         </div>
-                    </div>
+                        </div>
                 }
                 </div>
         )
@@ -330,17 +341,18 @@ class EmployeeForm extends React.Component{
 }
 
 const mapStateToProps = (state) => {
-    console.log(state.regionName);
+    console.log('region state', state.region.regionName);
+    
     return {
         regionName: state.region.regionName
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        displayRegion: (regionName) => {
-            dispatch(displayRegion(regionName));
+        displayRegion: (regionName) => dispatch(displayRegion(regionName)),
+        creatingEmployee: (employee) => dispatch(creatingEmployee(employee))
         }
     }
     
-}
+
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EmployeeForm));

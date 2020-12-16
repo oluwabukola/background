@@ -9,15 +9,18 @@ import AddRegion from './AddRegion';
 import Employee from './Employee';
 import EmployeeForm from './EmployeeForm'
 import CreateEmployee from './CreateEmployee';
-import Verify from './Verify';
+import Verify from './verification/Verify';
 import GuarantorForm from './GuarantorForm';
 import ResultForm from './ResultForm';
 import EmployerForm from './EmployerForm';
 import Update from './Update';
 import View from './View';
+import RegionView from './RegionView';
 import EmployeeInfo from './EmployeeInfo';
 import GuarantorInfo from './GuarantorInfo';
 import EmployerInfo from './EmployerInfo';
+import RegionInfo from './RegionInfo';
+import Results from './Results';
 import ResultInfo from './ResultInfo';
 import EditEmployee from './EditEmployee';
 import Guarantors from './Guarantors';
@@ -27,18 +30,25 @@ import EditEmployer from './EditEmployer';
 import EditResult from './EditResult';
 import Employers from './Employers';
 import EditGuarantor from './EditGuarantor';
+import Verification from './verification/Verification';
+import Address from './verification/Address';
+import VerifyGuarantors from './verification/VerifyGuarantors'
+
+import Nav from './Nav';
+import Signout from './Signout';
 
 
 function App() {
   return (
+   
     <Router>
+      
       <Switch>
-        <div>
           <Route path='/' exact component={Signup}>
           </Route>
           <Route path='/login' exact component={Login}>
-            </Route>
-          <Route path="/home" component={Home}>
+        </Route>
+        <Route path="/home" component={Home}>
           </Route>
           <Route path='/regions' component={Regions}>
           </Route>
@@ -50,8 +60,11 @@ function App() {
           </Route>
           <Route path='/employee' component={Employee}>
           </Route>
-          <Route path='/verify' component={Verify}>
-          </Route>
+         
+        <Route path='/verification' component={Verification}>
+        </Route>
+        <Route path='/address' component={Address}>
+        </Route>
           <Route path='/guarantorForm/:id' component={GuarantorForm}>
           </Route>
           <Route path='/employerForm/:id' component={EmployerForm}>
@@ -61,14 +74,20 @@ function App() {
           <Route path='/update/:id' component={Update}>
           </Route>
           <Route path='/view/:id' component={View}>
+        </Route>
+        <Route path='/regionView/:id' component={RegionView}>
           </Route>
           <Route path='/employeeInfo/:id' component={EmployeeInfo}>
           </Route>
           <Route path='/employerInfo/:id' component={EmployerInfo}>
           </Route>
           <Route path='/guarantorInfo/:id' component={GuarantorInfo}>
-          </Route>
-          <Route path='/resultInfo/:id' component={ResultInfo}>
+        </Route>
+        <Route path='/regionInfo/:id' component={RegionInfo}>
+        </Route>
+        <Route path='/resultInfo/:id' component={ResultInfo}>
+        </Route>
+          <Route path='/results/:id' component={Results}>
           </Route>
           <Route path='/editEmployee/:id' component={EditEmployee}>
           </Route>
@@ -83,10 +102,14 @@ function App() {
           <Route path='/employers/:id' component={Employers}>
           </Route>
           <Route path='/editGuarantor/:id' component={EditGuarantor}>
+        </Route>
+        <Route path='/verify/:id' component={Verify}>
+        </Route>
+        <Route path='/verifyguarantors/:id' component={VerifyGuarantors}>
           </Route>
-        </div>
         </Switch>
       </Router>
+
   );
 }
 

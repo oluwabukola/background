@@ -98,14 +98,15 @@ justify-content: center;
   margin-bottom: 25px;
 }
 .navi li i{
-  margin-right:10px;
+  margin-right:10px ;
 }
-.graph{
+
+.graph {
   grid-column: 2/7;
   grid-template-columns: repeat(2,1fr );
   display: grid;
   grid-gap: 10px;
-  justify-content: center;
+  justify-content: center !important;
   
 }
 .graph div{
@@ -160,6 +161,7 @@ justify-content: center;
   display: flex;
   flex-direction: column;
   padding: 10px;
+ 
  /* align-items: center; */
  }
 
@@ -506,7 +508,7 @@ font-weight: bolder;
 .card{
   width: 60%;
   background-color: #ffffff;
-  display: flex !important ;
+  display: flex  ;
   flex-direction: column!important;
   margin: 0 auto;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2) !important;
@@ -556,7 +558,100 @@ hr{
   font-weight: bold;
   width: 40% !important;
 }
+.no-guarantor{
+  width: 30%;
+  text-align: center !important;
+   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2) !important;
+   background-color: #ffffff;
+   border-radius: 10px;
+   margin: 5% auto;
+   padding: 10px;
+}
+.no-guarantor h5{
+  text-align: center;
+  color: #2b4f81 !important;
+}
 
-/* .button-update button:first-child{
-  width: 50%!important;
-} */
+/* verify modal*/
+
+
+.vef{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+
+}
+.check {
+  width: 15%;
+ text-align: center;
+  padding: 10px;
+  margin-right: 5px;
+}
+.check input[type=checkbox]{
+  transform: scale(2);
+}
+.comment{
+  width: 100%;
+  padding: 5px;
+  display: flex;
+justify-content: center;
+    align-items: center;
+}
+.comment textarea{
+  text-align: center;
+  width: 90%;
+  height: 15vh;
+
+}
+
+.verify-now {
+border: none;
+background-color: #2b4f81;
+color: #ffffff;
+padding: 7px 10px;
+border-radius: 25px;
+font-size: 14px;
+font-weight: 600;
+
+}
+.verified{
+  border: none;
+background-color: #008000;
+color: #ffffff;
+padding: 6px 10px;
+border-radius: 25px;
+font-size: 12px;
+font-weight:600;
+}
+
+.verify-submission{
+  width:100%;
+  padding: 5px 20px;
+  display: flex;
+  height: auto;
+}
+.verify-submit{
+  width: 40%;
+  padding:5px;
+  border: none;
+  outline: none;
+  background-color: #2b4f81;
+  color: #ffffff;
+  border-radius: 25px;
+}
+.verification-action{
+  padding:5px 10px;
+  background-color: #2b4f81;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+.pagination a {
+  color: #2b4f81 !important;
+}

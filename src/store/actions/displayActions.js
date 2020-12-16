@@ -1,3 +1,5 @@
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
 export const displayEmployee = (employee) => {
     const token = localStorage.getItem('token');
     return (dispatch, getState) => {
@@ -54,6 +56,31 @@ export const displayGuarantor = (guarantor) => {
     }
 }
 
+export const getRegion = (region) => {
+    const token = localStorage.getItem('token');
+    return (dispatch, getState) => {
+        const response = fetch(`http://hotelanywhere.ng/background/api/region/${region}`,{
+            method: 'GET',
+        headers: {
+            'Authorization':`Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+            
+        })
+            .then(response => {
+              return  response.json();
+                
+            })
+            .then(data => {
+                console.log('getting one  region', data);
+                dispatch({type: 'GET_REGION', payload:data})
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+              });
+    }
+}
+
 export const displayEmployer = (employer) => {
     const token = localStorage.getItem('token');
     return (dispatch, getState) => {
@@ -80,17 +107,15 @@ export const displayEmployer = (employer) => {
     }
 }
 
-
 export const displayResult = (result) => {
     const token = localStorage.getItem('token');
     return (dispatch, getState) => {
         const response = fetch(`http://hotelanywhere.ng/background/api/employee_result/${result}`, {
             method: 'GET',
-        headers: {
+            headers: {
             'Authorization':`Bearer ${token}`,
-                'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
             }
-            
         })
             .then(response => {
               return  response.json();
@@ -98,13 +123,38 @@ export const displayResult = (result) => {
             })
             .then(data => {
                 console.log(data);
-                dispatch({type: 'DISPLAY_RESULT', payload:data})
+                dispatch({ type: 'DISPLAY_RESULT',  payload:data})
             })
             .catch((error) => {
                 console.error('Error:', error);
               });
     }
 }
+
+export const getResults = (results) => {
+    const token = localStorage.getItem('token');
+    return (dispatch, getState) => {
+        const response = fetch(`http://hotelanywhere.ng/background/api/employee_results/${results}`, {
+            method: 'GET',
+            headers: {
+            'Authorization':`Bearer ${token}`,
+            'Content-Type': 'application/json',
+            }
+        })
+            .then(response => {
+              return  response.json();
+                
+            })
+            .then(data => {
+                console.log(data);
+                dispatch({ type: 'GET_RESULTS',  payload:data})
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+              });
+    }
+}
+
 
 export const editEmployee = (employee) => {
     const token = localStorage.getItem('token');
@@ -155,8 +205,8 @@ export const getGuarantors = (guarantors) => {
             .then(data => {
                 console.log(data);
                 console.log('guar', guarantors);
-                dispatch({type: 'GET_GUARANTORS', payload:data})
-               
+                dispatch({ type: 'GET_GUARANTORS', payload: data });
+
             })
             .catch((error) => {
                 console.error('Error:', error);

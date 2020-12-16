@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {displayResult} from './store/actions/displayActions'
+import { displayResult } from './store/actions/displayActions';
+import Nav from './Nav';
 
 class ResultInfo extends React.Component{
     constructor(props) {
@@ -9,23 +10,23 @@ class ResultInfo extends React.Component{
        
     }
     componentDidMount() {
-        const data = this.props.id;
-         //const data = this.props.match.params.id;
-        console.log('result data dis', data);
-       this.props.displayResult(data)
+        const data = this.props.match.params.id;
+        console.log( 'result info state', data);
+        this.props.displayResult(data)
+    console.log('here it is', this.props.displayResult(data));
     }
     
     render() {
      
         const { result } = this.props;
-        console.log(result);
-         
-        const data = this.props.id;
-        // const data = this.props.match.params.id;
+        console.log('result for', result);
+        const data = this.props.match.params.id;
     
         return (
-                <div className="rest">
-                <div className="card">
+            <div className="home-page">
+                <Nav />
+            <div className="rest">
+                <div className="card"  >
                     <div className="content">
                         <div className="created"><h6>University Name</h6> </div>
                         <div className="created">{result.university_name}</div>
@@ -58,22 +59,23 @@ class ResultInfo extends React.Component{
                     </div>
 
                 </div>
-                      
+
+                </div>
                 </div>
                 
         );
     }
 }
 const mapStateToProps = (state) => {
+    console.log('display result', state.result.oneresult);
     return {
-        result: state.result.oneresult
+        result: state.result.oneresult,
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        displayResult: (result) => {
-            dispatch(displayResult(result));
-        }
+        displayResult: (result) => dispatch(displayResult(result))
+            
     }
 }
 

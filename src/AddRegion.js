@@ -5,6 +5,10 @@ import { connect } from 'react-redux';
 import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { createRegion } from './store/actions/employeeActions';
+import Nav from './Nav';
+import toast from 'toasted-notes' 
+import 'toasted-notes/src/styles.css';
+
 
 let letters = RegExp(/^[A-Za-z]+$/);
 
@@ -57,7 +61,8 @@ class AddRegion extends React.Component{
          this.props.createRegion(data).then(datum => {
             this.setState({
                 loading: false
-           });
+            });
+            toast.notify('Region successfully created!');
              console.log('Success:', datum)
              this.props.history.push('/regions');
                 
@@ -89,30 +94,17 @@ class AddRegion extends React.Component{
     }
     
     render() {
-    return (
+        return (
+        
         <div>
             {this.state.loading ?
                 <div className="sweet-loading">
                     <CircleLoader css={loaderCss} size={100}
                         color={"#2b4f81"}
                         loading={true} />
-                </div> :
-                <div className="home-page">
-                    <div className="navi">
-                        <ul>
-                            <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                      
-                            <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                                <div className="sub-region">
-                                    <ul >
-                                        <li><button type="button">Edit Region</button></li>
-                                        <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                        </ul>
-                    </div>
+                    </div> :
+                    <div className="home-page">
+                <Nav />
                     <div className="rest">
                         <button type="button" className="back-btn" onClick={this.handleBack}><i class="fas fa-arrow-left"></i>Back</button>
                         <hr />
@@ -126,8 +118,8 @@ class AddRegion extends React.Component{
                             <button type='button' className="region-submit" onClick={this.handleSubmit}>Submit</button>
                         
                         </form>
-                    </div>
-                </div>
+                        </div>
+                        </div>
             }
             </div>
                 

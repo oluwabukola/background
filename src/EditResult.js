@@ -4,7 +4,9 @@ import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { displayResult, editResult } from './store/actions/displayActions';
-
+import Nav from './Nav';
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
 
 let letters = RegExp(/^[A-Za-z]+$/);
 const formValid =({formErrors, ...rest} ) => {
@@ -77,19 +79,17 @@ class EditResult extends React.Component{
                 this.setState({
                     loading: false
                 });
-                 
+                toast.notify('Result successfully edited!');
                  console.log('Success:', datum);     
              })
             .catch((error) => {
                 console.error('Error:', error);
             });
-  
         }
         
         else {
             console.error('Form inValid');
             }
-
     }
 
     handleChange = (event) => {
@@ -117,8 +117,8 @@ class EditResult extends React.Component{
                
             default:
                 break;
-        }
-        this.setState({ formErrors: formErrors });
+            }
+            this.setState({ formErrors: formErrors });
         result[name] = value
         this.setState({result})
         console.log(this.state)
@@ -135,6 +135,8 @@ class EditResult extends React.Component{
                             color={"#2b4f81"}
                             loading={true} />
                     </div> :
+                    <div className="home-page">
+                        <Nav />
                     <div className="rest">
                         <div className="update-form">
                             <form className="guarantor-form">
@@ -184,6 +186,7 @@ class EditResult extends React.Component{
                             
                             </form>
                         </div>
+                    </div>
                     </div>
                 }
                 </div>

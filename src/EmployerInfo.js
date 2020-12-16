@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {displayEmployer} from './store/actions/displayActions'
+import { displayEmployer } from './store/actions/displayActions';
+import Nav from './Nav';
 
 class EmployerInfo extends React.Component{
     constructor(props) {
@@ -21,14 +22,8 @@ class EmployerInfo extends React.Component{
      
         return (
             <div className="home-page">
-                <div className="navi">
-                    <ul>
-                        <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                        <li><Link to='/regions'><i className="fas fa-compass"></i>Regions</Link> </li>
-                        <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                        <li><i class="fas fa-sign-out-alt">Signout</i></li>
-                    </ul>
-                </div>
+                <Nav />
+
                 <div className="rest">
                 <div className="card">
                     <div className="content">

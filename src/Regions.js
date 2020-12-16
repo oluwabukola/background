@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { displayRegion } from './store/actions/employeeActions';
+import { getRegion } from './store/actions/displayActions';
+import { deleteRegion } from './store/actions/deleteActions';
+import Nav from './Nav';
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
 
 class Regions extends React.Component{
     constructor(props) {
@@ -12,28 +17,27 @@ class Regions extends React.Component{
       this.props.displayRegion();
       //console.log('display', this.props.displayRegion());
     }
+    handleDelete = (id) => {
+        console.log('deleting region', id);
+    
+        this.props.deleteRegion(id).then(datum => {
+            toast.notify('Region successfully deeted!');
+        console.log('Success:', datum)
+        
+                // this.props.history.push('/employerInfo')
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
     render() {
         const { regionName } = this.props;
         console.log('region', regionName);
         
         return (
             <div className="home-page">
-                <div className="navi">
-                    <ul>
-                        <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                      
-                        <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                            <div className="sub-region">
-                            <ul >
-                                <li><button type="button">Edit Region</button></li>
-                                <li> <Link to='/addregion'><button type="button">Add Region</button></Link></li>
-                                </ul>
-                                </div>
-                        </li>
-                        <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                        <li><i className="fas fa-sign-out-alt"></i>Signout</li>
-                    </ul>
-                </div>
+                <Nav/>
                 <div className="rest">
                     <h1>Regions</h1>
                     
@@ -57,8 +61,11 @@ class Regions extends React.Component{
                                          <td>{regionName.name}</td>
                                          <td>{regionName.created_at.split('T')[0]}</td>
                                          
-                                    <td className="eyes"><Link to={`/editRegion/${regionName.id}`}><i class="fas fa-trash-alt"></i></Link></td>
-                                    <td className="eyes"><Link to="/employee"><i class="far fa-eye eye"></i></Link></td>
+                                    <td className="eyes"><Link to={`/editRegion/${regionName.id}`}><i class="fas fa-pen-square"></i></Link></td>
+                                    
+                                     <td className="eyes"><Link to={`/regionInfo/${regionName.id}`}><i class="far fa-eye eye"></i></Link></td>
+                                     <td className="eyes"><i onClick={() => this.handleDelete(regionName.id)} class="fas fa-trash-alt"></i></td>
+                                     {/* <Link to="/employee"><i class="far fa-eye eye"></i></Link> */}
                                      </tr>
                                  )
                             }
@@ -66,20 +73,22 @@ class Regions extends React.Component{
                         </table>
                 </div>
                 </div>
+                
         )
     }
 }
 const mapStateToProps = (state) => {
-    console.log(state.region.regionName);
+    console.log(state.region.oneregion);
     return {
-        regionName: state.region.regionName
+        regionName: state.region.regionName,
+        deleted: state.region.oneregion
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        displayRegion: (regionName) => {
-            dispatch(displayRegion(regionName));
-        }
+        displayRegion: (regionName) => dispatch(displayRegion(regionName)),
+        deleteRegion: (region) => dispatch(deleteRegion(region)),
+        getRegion: (region) =>  dispatch(getRegion(region)),
     }
     
 }

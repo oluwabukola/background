@@ -1,8 +1,8 @@
 const initState = {
-    
     region: [],
     regionName: [],
     editedRegion: [],
+    oneregion:[],
 }
 
 const regionReducer = (state = initState, action) => {
@@ -28,6 +28,13 @@ const regionReducer = (state = initState, action) => {
                 ...state,
                 regionName: payload.data
             };
+            case 'GET_REGION':
+                console.log('one region', action.payload);
+                return {
+                    ...state,
+                    oneregion: payload.data
+            };
+        
             case 'EDIT_REGION':
            
                 console.log('region edited', action.payload);
@@ -35,13 +42,16 @@ const regionReducer = (state = initState, action) => {
                 return {
                     ...state,
                     editedRegion: payload.data
+            };
+            case 'DELETE_REGION':
+                console.log('delete region', action.payload);
+                return {
+                    ...state,
+                    regionName: state.regionName.filter(item => item.id !== action.payload)
                 };
-        
         default:
             return state;
-        
     }
-    
 }
 
 export default regionReducer;

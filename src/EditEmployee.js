@@ -7,6 +7,10 @@ import { connect } from 'react-redux';
 import EmployerInfo from './EmployerInfo';
 import { editEmployee } from './store/actions/displayActions';
 import { displayEmployee } from './store/actions/displayActions';
+import Nav from './Nav';
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
+
 
 let numbers = RegExp(/^[0-9]+$/);
 let letters = RegExp(/^[A-Za-z]+$/);
@@ -69,7 +73,7 @@ class Edit extends React.Component{
         if (formValid(this.state)) {
             const params = this.props.match.params;
             console.log('sending...', params.id);
-               const { employee } = this.state;
+            const { employee } = this.state;
             
             const data = {
             employee_id: params.id,
@@ -92,7 +96,8 @@ class Edit extends React.Component{
             this.props.editEmployee(data).then(datum => {
                 this.setState({
                     loading: false
-               });
+                });
+                toast.notify('Employee successfully edited!');
                 console.log('Success:', datum)
                 // this.props.history.push('/employerInfo')
                     
@@ -174,21 +179,8 @@ class Edit extends React.Component{
                             loading={true} />
                     </div> :
                     <div className="home-page">
-                        <div className="navi">
-                            <ul>
-                                <li><Link to='/home'><i className="fas fa-columns"></i>Home</Link></li>
-                  
-                                <li><Link to='/regions'><i className="fas fa-compass regn"></i>Regions</Link>
-                                    <div className="sub-region">
-                                        <ul >
-                                            <li><button type="button">Edit Region</button></li>
-                                            <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li><Link to='/createEmployee'><i className="fas fa-compass regn"></i>Create Employee</Link> </li>
-                            </ul>
-                        </div>
+                        <Nav />
+                        
                         <div className="rest">
                             <button type="button" className="back-btn" onClick={this.handleSubmit}><i class="fas fa-arrow-left"></i>Back</button>
                             <hr />

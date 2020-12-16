@@ -5,6 +5,10 @@ import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { editGuarantor } from './store/actions/displayActions';
 import { displayGuarantor } from './store/actions/displayActions';
+import Nav from './Nav';
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
+
 
 
 
@@ -86,7 +90,8 @@ class EditGuarantor extends React.Component{
             this.props.editGuarantor(data).then(datum => {
                 this.setState({
                     loading: false
-               });
+                });
+                toast.notify('Guarntor successfully edited!');
                  console.log('Success:', datum);     
             })
             .catch((error) => {
@@ -151,6 +156,11 @@ class EditGuarantor extends React.Component{
                             color={"#2b4f81"}
                             loading={true} />
                     </div> :
+                    <div className="home-page">
+                    <Nav />
+                    
+                    <div className="rest">
+
                              <div className="update-form"> 
                                 
                                 <form className="guarantor-form">
@@ -297,6 +307,8 @@ class EditGuarantor extends React.Component{
                                     <button type='button' className="form-submit" onClick={this.handleSubmit}>Save</button>
                                 </form>
                             </div>
+                        </div>
+                        </div>
                 }
                 </div>
         )

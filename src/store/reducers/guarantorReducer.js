@@ -22,8 +22,6 @@ const guarantorReducer = (state = initState, action) => {
            
             return {
                 ...state,
-                loading: false,
-                 error: null,
                 guarantor: payload.data
             };
             case 'DISPLAY_GUARANTOR':
@@ -36,7 +34,7 @@ const guarantorReducer = (state = initState, action) => {
                 console.log('get guarantors', action.payload);
                 return {
                     ...state,
-                    guarantors: payload.data
+                    guarantors: payload.data === undefined ? [] :  payload.data
                 };
             
             case 'EDIT_GUARANTOR':
@@ -45,8 +43,12 @@ const guarantorReducer = (state = initState, action) => {
                     ...state,
                     editguarantor: payload.data
             };
-        
- 
+            case 'DELETE_GUARANTOR':
+                console.log('deleteeguarantor', action.payload);
+                return {
+                    ...state,
+                    guarantors: state.guarantors.filter(item => item.id !== action.payload)
+                };
         
         default:
             return state;

@@ -4,8 +4,10 @@ import { CircleLoader } from 'react-spinners';
 import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { createEmployee } from './store/actions/employeeActions';
-import {createEmployer} from './store/actions/employeeActions'
-
+import { createEmployer } from './store/actions/employeeActions';
+import Nav from './Nav';
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
 
 let numbers = RegExp(/^[0-9]+$/);
 let letters = RegExp(/^[A-Za-z]+$/);
@@ -77,10 +79,18 @@ class EmployerForm extends React.Component{
             
              this.props.createEmployer(data).then(datum => {
                 this.setState({
-                    loading: false
-               });
+                    company_name: '',
+                    email: '',
+                    phone_number: '',
+                    address: '',
+                    position:'',
+                    issue: '',
+                    reason_leaving:'',
+                    loading: false,
+                });
+                toast.notify('Employer information successfully captured!');
                 console.log('Success:', datum)
-                this.props.history.push('/createEmployee')
+                // this.props.history.push('/createEmployee')
                     
             })
             .catch((error) => {
@@ -134,6 +144,7 @@ class EmployerForm extends React.Component{
                             color={"#2b4f81"}
                             loading={true} />
                     </div> :
+                
                         <div className="rest">
                             <div className="update-form">
                                 <form className="guarantor-form">
@@ -224,6 +235,7 @@ class EmployerForm extends React.Component{
                                 </form>
                             </div>
                         </div>
+                        
                     
                 }
                 </div>

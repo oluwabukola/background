@@ -5,6 +5,10 @@ import { css } from '@emotion/core';
 import { connect } from 'react-redux';
 import { editEmployer } from './store/actions/displayActions';
 import { displayEmployer } from './store/actions/displayActions';
+import Nav from './Nav';
+import toast from 'toasted-notes'; 
+import 'toasted-notes/src/styles.css';
+
 
 
 let numbers = RegExp(/^[0-9]+$/);
@@ -60,14 +64,14 @@ class EditEmployer extends React.Component{
    
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log('employer error', this.state.formErrors)
+        // console.log('employer error', this.state.formErrors)
         let errors = this.state.formErrors
-        console.log('errors', errors)
+        // console.log('errors', errors)
        
         if (formValid(this.state)) {
 
             const params = this.props.match.params;
-            console.log('sending...', params.id);
+            // console.log('sending...', params.id);
                const { employer } = this.state;
             
             const data = {
@@ -90,6 +94,7 @@ class EditEmployer extends React.Component{
                     loading: false
                });
                  console.log('Success:', datum)
+                 .notify('Employer succetoastssfully edited!');
                   this.props.history.push(`/employers/${params.id}`)
                     
             })
@@ -148,6 +153,8 @@ class EditEmployer extends React.Component{
                             color={"#2b4f81"}
                             loading={true} />
                     </div> :
+                    <div className="home-page">
+                        <Nav/>
                         <div className="rest">
                             <div className="update-form">
                                 <form className="guarantor-form">
@@ -238,7 +245,7 @@ class EditEmployer extends React.Component{
                                 </form>
                             </div>
                         </div>
-                    
+                        </div>
                 }
                 </div>
         );

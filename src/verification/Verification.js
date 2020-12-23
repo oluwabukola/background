@@ -59,6 +59,7 @@ class Verification extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
+    console.log('displaying referees', state.verification.candidate);
     return {
         candidate: state.verification.candidate,
     }

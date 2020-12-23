@@ -45,7 +45,7 @@ const resultReducer = (state = initState, action) => {
                 return {
                     ...state,
                     results: state.results.filter(item => item.id !== action.payload)
-                };
+            };
 
             
         default:

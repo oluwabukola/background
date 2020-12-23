@@ -52,7 +52,6 @@ class Nav extends React.Component {
           <li><Link to='/regions'><i className="fas fa-compass"></i>Regions</Link>
             <div className="sub-region">
               <ul >
-                <li><button type="button">Edit Region</button></li>
                 <li> <Link to='/addregion'><button type="button">Add Region<i className="fas fa-plus"></i></button></Link></li>
               </ul>
             </div>

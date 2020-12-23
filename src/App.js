@@ -31,11 +31,16 @@ import EditResult from './EditResult';
 import Employers from './Employers';
 import EditGuarantor from './EditGuarantor';
 import Verification from './verification/Verification';
-import Address from './verification/Address';
-import VerifyGuarantors from './verification/VerifyGuarantors'
-
-import Nav from './Nav';
+import VerifyGuarantors from './verification/VerifyGuarantors';
+import VerifyPrevEmployers from './verification/VerifyPrevEmployers';
+import VerifyAddress from './verification/VerifyAddress';
+import VerifyReferees from './verification/VerifyReferees';
+import Details from './verification/Details';
 import Signout from './Signout';
+import GuarantorDetails from './verification/GuarantorDetails';
+import EmployerDetails from './verification/EmployerDetails';
+import RefereeDetails from './verification/RefereeDetails';
+
 
 
 function App() {
@@ -60,11 +65,6 @@ function App() {
           </Route>
           <Route path='/employee' component={Employee}>
           </Route>
-         
-        <Route path='/verification' component={Verification}>
-        </Route>
-        <Route path='/address' component={Address}>
-        </Route>
           <Route path='/guarantorForm/:id' component={GuarantorForm}>
           </Route>
           <Route path='/employerForm/:id' component={EmployerForm}>
@@ -101,13 +101,31 @@ function App() {
           </Route>
           <Route path='/employers/:id' component={Employers}>
           </Route>
-          <Route path='/editGuarantor/:id' component={EditGuarantor}>
+        <Route path='/editGuarantor/:id' component={EditGuarantor}>
+        </Route>
+        <Route path='/verification' component={Verification}>
         </Route>
         <Route path='/verify/:id' component={Verify}>
         </Route>
         <Route path='/verifyguarantors/:id' component={VerifyGuarantors}>
-          </Route>
-        </Switch>
+        </Route>
+        <Route path='/verifyprevemployers/:id' component={VerifyPrevEmployers}>
+        </Route>
+        <Route path='/verifyreferees/:id' component={VerifyReferees}>
+        </Route>
+        <Route path='/verifyAddress/:id' component={VerifyAddress}>
+        </Route>
+
+        <Route path='/details/:id' component={Details}>
+        </Route>
+        <Route path='/guarantorDetails/:id' component={GuarantorDetails}>
+        </Route>
+        <Route path='/employerDetails/:id' component={EmployerDetails}>
+        </Route>
+        <Route path='/refereeDetails/:id' component={RefereeDetails}>
+        </Route>
+      </Switch>
+      
       </Router>
 
   );
